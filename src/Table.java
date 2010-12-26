@@ -1,8 +1,7 @@
-
 /**
  * @author Gillou
  * hello world
- * hello guil
+ * hello guillian
  */
 public class Table {
 
