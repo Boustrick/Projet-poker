@@ -1,11 +1,13 @@
+import java.awt.List;
+
 
 /**
  * 
  * @author Bouteilloux
  * Donc ça c'est à toi de remplir Gilles
  * Il faut qu'il y ait une fonction pour que tu puisses avoir
- * des mises à jour pour ton innterface.
- * L'autre groupe avait proposer pour qu'on soit sur les mêmes
+ * des mises à jour pour ton interface.
+ * L'autre groupe avait proposé pour qu'on soit sur les mêmes
  * type de donnés d'utiliser:
  * 
  * List<Object[]> listeInfoJoueur;
@@ -15,5 +17,16 @@
 
 public class InterfaceClient 
 {
-
+	String pseudo;
+	int solde;
+	int mise;
+	int statut;
+	
+	Object [] mesInfos = {pseudo, solde, mise, statut};
+	
+	
+	 public void setListInfoJoueur(Object[] mesInfos)
+	 {
+		 
+	 }
 }
