@@ -1,18 +1,14 @@
 /**
- * @author Gillou
- * hello world
- * hello guillian
+ * @author Moi
+ * hello world poker
+ * hello gilles
  */
 public class Table {
 
   public Table(){
 	  
-	 
-	  
-	  }
-  void getTable(){
-	  //mdmdm
   }
-  
-  
+  void getTable(){
+	  //lapin
+  }
 }
