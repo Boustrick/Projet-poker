@@ -1,3 +1,3 @@
 # Projet poker
 
-## Faire un jeu de poker
+## Faire un jeu de poker !
