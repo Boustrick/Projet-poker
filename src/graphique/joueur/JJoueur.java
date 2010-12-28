@@ -1,5 +1,7 @@
 package graphique.joueur;
 
+import graphique.carte.JCarte;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -23,4 +25,21 @@ public class JJoueur extends JPanel {
 		this.setPreferredSize(new Dimension(100, 50));
 		this.setVisible(true);
 	}
+	
+	// Retourner les cartes du joueur
+	public void retournerCartes () {
+		
+	}
+	
+	// Ajouter les cartes d'un joueur
+	public void ajouterCartes (JCarte c1, JCarte c2) {
+		
+	}
+	
+	// Effacer les cartes d'un joueur
+	public void effacerCartes () {
+		
+	}
+
+	
 }
