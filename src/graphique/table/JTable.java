@@ -50,7 +50,9 @@ public class JTable extends JPanel implements ComponentListener {
 	private GridBagLayout layout;
 	private GridBagConstraints constraints;
 	
-	// Constructeur
+	/**
+	 * Constructeur du panel Table
+	 */
 	public JTable () {
 		// Initialisation de la taille de la banque du milieu de table
 		banque = new JBanque(TAILLE*5, TAILLE);
@@ -79,12 +81,17 @@ public class JTable extends JPanel implements ComponentListener {
 		this.setVisible(true);
 	}
 	
-	// Surcharge de l'afficheur du panel pour afficher le fond d'écran
+	/**
+	 * On redéfinit paintComponent pour afficher l'image en fond
+	 * @param g Paneau d'affichage des composants du Panel
+	 */
 	public void paintComponent(Graphics g) {
 		g.drawImage(resized,0,0,this);
 	}
 	
-	// Initialisation du layout
+	/**
+	 * Initialisation du layout
+	 */
 	private void initLayout () {
 		layout = new GridBagLayout();
 		constraints = new GridBagConstraints();
@@ -93,12 +100,17 @@ public class JTable extends JPanel implements ComponentListener {
 		constraints.weighty = 1;
 	}
 	
-	// Resize l'image
+	/**
+	 * Lorsque la taille de la fenètre change, 
+	 * on doit changer la taille de l'image de fond
+	 */
 	private void resize () {
 		resized =  table.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_FAST);
 	}
 	
-	// Affichage des éléments de la table
+	/**
+	 * Affichage de la table, avec les différents joueurs et cartes
+	 */
 	private void formerTable () {
 		// Ajout de l'affichage du pot de la table
 		constraints.gridx  = 5;
@@ -123,7 +135,11 @@ public class JTable extends JPanel implements ComponentListener {
 		}
 	}
 	
-	// Ajout d'un joueur a la table
+	/**
+	 * Affichage d'un joueur sur la table
+	 * @param panel Le joueur a afficher
+	 * @param position Position du joueur a afficher
+	 */
 	private void affJoueur (JPanel panel, int position) {
 		constraints.gridwidth = 3;
 		constraints.gridheight = 3;
@@ -192,7 +208,11 @@ public class JTable extends JPanel implements ComponentListener {
 		}
 	}
 	
-	// Ajout d'une carte a la table
+	/**
+	 * Affichage d'une carte sur la table
+	 * @param panel La carte a afficher
+	 * @param position Position de la carte a afficher
+	 */
 	private void affCarte (JPanel panel, int position) {
 		constraints.gridwidth = 1;
 		constraints.gridheight = 2;
@@ -231,32 +251,111 @@ public class JTable extends JPanel implements ComponentListener {
 		}
 	}
 	
+	
 	/***************** Modification de la table ************************/
-	// Ajout d'un joueur
+	/**
+	 * Ajoute un joueur a la table
+	 * @param j Le joueur a ajouter
+	 * @param position Position du joueur a ajouter
+	 */
 	public void ajoutJoueur (JJoueur j, int position) {
 		joueurs.put(position, j);
 		this.formerTable();
 	}
 
-	// Ajout d'une carte
+	/**
+	 * Ajoute une carte sur la table
+	 * @param c La carte a ajouter
+	 * @param position Position de la carte a ajouter
+	 */
 	public void ajoutCarte (JCarte c, int position) {
 		cartes.put(position, c);
 		this.formerTable();
 	}
 
-	// Suppression d'un joueur
+	/**
+	 * Suprime un joueur present a la table
+	 * @param position Supprime le joueur de la table, assis sur la chaise position
+	 */
 	public void suppressionJoueur (int position) {
 		joueurs.put(position , new JVide(joueur_lg, joueur_ht));
 		this.formerTable();
 	}
 
-	// Enlever les cartes
+	/**
+	 * Enlever les cartes du milieu de la table
+	 */
 	public void suppressionCartes () {
 		for (int i = 0; i < 5; i++) {
 			cartes.put(i, new JVide(carte_lg, carte_ht));
 		}
 		this.formerTable();
 	}
+	
+	/**
+	 * Retourner une carte, si elle est posée, ou si le joueur est present a la table
+	 * @param type Type de carte à retourner, celle de la table 0, celle d'un joueur 1
+	 * @param position Position, soit de la carte, soit du joueur
+	 */
+	public void retournerCarte (int type, int position) {
+		if (type == 0) {
+			if (cartes.get(position) instanceof JCarte) {
+				((JCarte)cartes.get(position)).retournerCarte();
+			}
+		} else {
+			if (joueurs.get(position) instanceof JJoueur) {
+				((JJoueur)joueurs.get(position)).retournerCartes();
+			}
+		}
+	}
+	
+	/**
+	 * Ajoute les cartes a un joueur
+	 * @param position Position du joueur
+	 * @param c1 Premiere carte a ajouter au joueur
+	 * @param c2 Seconde carte a ajouter au joueur
+	 */
+	public void ajoutCartesJoueur (int position, JCarte c1, JCarte c2) {
+		if (joueurs.get(position) instanceof JJoueur) {
+			((JJoueur)joueurs.get(position)).ajouterCartes (c1, c2);
+		}
+	}
+
+	/**
+	 * Effacer les cartes d'un joueur
+	 * @param position Position du joueur
+	 */
+	public void effacerCartes (int position) {
+		if (joueurs.get(position) instanceof JJoueur) {
+			((JJoueur)joueurs.get(position)).effacerCartes();
+		}
+	}
+	
+	/**
+	 * Ajouter une somme au pot de la table
+	 * @param somme Somme a ajouter au pot de la table, elle doit etre positive
+	 */
+	public void ajouterPot (int somme) {
+		if (somme > 0) {
+			banque.ajouter(somme);
+		}
+	}
+	
+	/**
+	 * Remise a zero du pot de la table
+	 */
+	public void razPot () {
+		banque.raz();
+	}
+
+	/**
+	 * Retourne la valeur du pot de la table
+	 * @return Valeur du pot du milieu de table
+	 */
+	public int getPot () {
+		return banque.getPot();
+	}
+	
 	
 	/***************** Zone des fonctions du listener  *****************/
 	@Override
