@@ -1,3 +1,5 @@
+package graphique.boutons;
+
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
