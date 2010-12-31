@@ -3,6 +3,7 @@ package graphique.table;
 import graphique.carte.JCarte;
 import graphique.joueur.JJoueur;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -23,7 +24,7 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class JTable extends JPanel implements ComponentListener {
 	// Taille d'une case du GridBagLayout
-	private static final int TAILLE = 25;
+	private static final int TAILLE = 35;
 	
 	// Taille d'une carte au milieu de la table
 	private static final int carte_lg = TAILLE;
@@ -72,12 +73,13 @@ public class JTable extends JPanel implements ComponentListener {
 		this.setLayout(layout);
 		
 		// Récupération de l'image de la table pour le fond
-		table = Toolkit.getDefaultToolkit().getImage("Images/table.gif");
+		table = Toolkit.getDefaultToolkit().getImage("Images/poker1.png");
 		
 		// Affichage des cartes et des joueurs
 		this.formerTable();
 		
 		this.addComponentListener(this);
+		this.setPreferredSize(new Dimension(1000, 500));
 		this.setVisible(true);
 	}
 	
