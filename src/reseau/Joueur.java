@@ -1,5 +1,6 @@
 package reseau;
 
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class Joueur
 	private int positionTable;
 	private int solde;
 	
+	private boolean present;
 	private boolean petiteBlinde;
 	private boolean grosseBlinde;
 	private boolean dealer;
@@ -25,9 +27,15 @@ public class Joueur
 	
 	private InterfaceClient interfaceJoueur;
 	
+	public Joueur()
+	{
+		this.present = false;
+	}
+	
 	public Joueur(Integer UID, String pseudo, int statut, boolean dealer, int positionTable, int solde, String ip, 
 			      InterfaceClient interfaceJoueur)
 	{
+		this.present = true;
 		carte =  new LinkedList<String>();
 		this.interfaceJoueur = interfaceJoueur;
 		this.UID = UID;
@@ -42,6 +50,11 @@ public class Joueur
 		this.setDealer(dealer);
 		this.setPositionTable(positionTable);
 		
+	}
+	
+	public boolean isPresent()
+	{
+		return present;
 	}
 	
 	/**

@@ -138,8 +138,8 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
     {
     	List<Object[]> lParticipant = new LinkedList<Object[]>();
     	
-    	List<Joueur> listJoueur = table.getListJoueur();
-    	List<Joueur> listAttente = table.getListJoueur();
+    	Joueur[] listJoueur = table.getListJoueur();
+    	Joueur[] listAttente = table.getListJoueur();
     	
     	for(Joueur j : listJoueur)
     	{
@@ -419,3 +419,4 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 	}
 	
 }
+

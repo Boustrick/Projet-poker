@@ -1,14 +1,11 @@
 package reseau;
 
 import java.util.LinkedList;
-import java.util.List;
-
-
 
 public class Table 
 {
-	private LinkedList<Joueur> listJoueur;
-	private LinkedList<Joueur> listAttente;
+	private Joueur[] listJoueur;
+	private Joueur[] listAttente;
 	
 	private LinkedList<String> listCarteTable;
 	private LinkedList<String> listCarte;
@@ -25,10 +22,13 @@ public class Table
 	{
 		pot = 0;
 		this.petiteBlinde = petiteBlinde;
-		listJoueur = new LinkedList<Joueur>();
+		
+		listJoueur = new Joueur[10];
+		listAttente = new Joueur[10];
+		
 		listCarte = new LinkedList<String>();
-		listAttente = new LinkedList<Joueur>();
 		listCarteTable = new LinkedList<String>();
+		
 		setPetiteB(false);
 		setGrosseB(false);
 		
@@ -51,7 +51,26 @@ public class Table
 	
 	public void setJoueur(Joueur newJoueur)
 	{
-		listJoueur.add(newJoueur);
+		if (newJoueur.isDealer()) 
+		{
+			listJoueur[9] = newJoueur;
+			newJoueur.setPositionTable(10);
+		}
+		else
+		{
+			int i = 0;
+			boolean placer = false;
+		
+			while(i<9 && !placer)
+			{
+				Joueur joueur = listJoueur[i];
+				if (!joueur.isPresent()) 
+				{
+					listJoueur[i] = newJoueur;
+					newJoueur.setPositionTable(i+1);
+				}
+			}
+		}
 	}
 	
 	/**
@@ -66,13 +85,16 @@ public class Table
 		int i=0;
 		Joueur joueur;
 		
-		while(i<listJoueur.size() && !trouver)
+		while(i<listJoueur.length && !trouver)
 		{
-			joueur = listJoueur.get(i);
-			if(joueur.getUID()==UID) trouver = true;
+			joueur = listJoueur[i];
+			if (joueur.isPresent())
+			{
+				if(joueur.getUID()==UID) trouver = true;
+			}
 			i++;
 		} 
-		return listJoueur.get(i-1);
+		return listJoueur[i-1];
 	}
 	
 	/**
@@ -128,7 +150,14 @@ public class Table
 	
 	public int getNbJoueur()
 	{
-		return (listJoueur.size());
+		int nbJoueur = 0;
+		
+		for(int i=0;i<10;i++)
+		{
+			Joueur joueur = listJoueur[i];
+			if(joueur.isPresent()) nbJoueur++;
+		}
+		return nbJoueur;
 	}
 	
 	/**
@@ -138,7 +167,18 @@ public class Table
 	
 	public void setAttente(Joueur joueur)
 	{
-		listAttente.add(joueur);
+		int i = 0;
+		boolean placer = false;
+		
+		while(i<9 && !placer)
+		{
+			Joueur j = listJoueur[i];
+			if (!j.isPresent()) 
+			{
+				listJoueur[i] = joueur;
+				joueur.setPositionTable(i+1);
+			}
+		}
 	}
 
 	/**
@@ -173,16 +213,19 @@ public class Table
 		int i=0;
 		Joueur joueur;
 		
-		while(i<listJoueur.size() && !trouver)
+		while(i<listJoueur.length && !trouver)
 		{
-			joueur = listJoueur.get(i);
+			joueur = listJoueur[i];
 			
-			if(joueur.getUID()==UID) trouver = true;
+			if (joueur.isPresent())
+			{
+				if(joueur.getUID()==UID) trouver = true;
+			}
 			
 			i++;
 		} 
-		if (i == listJoueur.size()) return listJoueur.get(0);
-		else return listJoueur.get(i);
+		if (i == listJoueur.length) return listJoueur[0];
+		else return listJoueur[i-1];
 	}
 
 	public void setListCarteTable(String carte) 
@@ -212,12 +255,12 @@ public class Table
 		return grosseB;
 	}
 	
-	public List<Joueur> getListJoueur()
+	public Joueur[] getListJoueur()
 	{
 		return listJoueur;
 	}
 	
-	public List<Joueur> getListAttente()
+	public Joueur[] getListAttente()
 	{
 		return listAttente;
 	}
