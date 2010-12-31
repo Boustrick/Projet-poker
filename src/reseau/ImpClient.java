@@ -23,27 +23,24 @@ public class ImpClient implements InterfaceClient {
      *        carte1	(string)
      *        carte2	(string)
      *        gain		(long)
-     * @return 0 si perdue, > 0 si gagné ou égalité.
+     * @return void
      * @throws RemoteException
      */
-	@Override
-	public void setResultat(Object[] gagnant) throws RemoteException {
-		
+
+	public void setResultat(Object[] gagnant)
+	{
 		
 	}
 
-	@Override
+
 	public void miseAJourTable(List<Object[]> listParticipant, long pot)
-			throws RemoteException {
-		// TODO Auto-generated method stub
-		
+	{
+	
 	}
 
-	@Override
-	public List<String> voirCartesATable(Object[] listCarte)
-			throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+	public void voirCartesATable(Object[] listCarte)
+	{
+
 	}
 
 }

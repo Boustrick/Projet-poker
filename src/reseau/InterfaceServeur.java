@@ -63,21 +63,21 @@ public interface InterfaceServeur extends Remote
      * @param somme à miser
      * @throws RemoteException
      */
-    public void relancer(long uuid, long somme) throws RemoteException;
+    void relancer(long uuid, long somme) throws RemoteException;
 	
     /*
      * suivre appelée par les joueurs se tenant après la grosse blinde
      * @param UUID du joueur
      * @throws RemoteException
      */
-    public void suivre(long uuid) throws RemoteException;
+    void suivre(long uuid) throws RemoteException;
     
     /*
      * seCoucher appelée si un joueur décide de se coucher
      * @param UUID du joueur
      * @throws RemoteException
      */
-    public void seCoucher(long uuid) throws RemoteException;
+    void seCoucher(long uuid) throws RemoteException;
 	
     /*
      * faireTapis appelée si un joueur a un bon jeu et veut tour miser
@@ -85,7 +85,7 @@ public interface InterfaceServeur extends Remote
      * @param somme à miser
      * @throws RemoteException
      */
-    public void faireTapis(long uuid, long somme) throws RemoteException;
+    void faireTapis(long uuid, long somme) throws RemoteException;
     
     /*
      * recupererMesPetitesBlind appelée pour demander au dealer de récupérer
