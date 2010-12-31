@@ -1,33 +1,70 @@
 package reseau;
-import java.awt.List;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+import java.util.List;
 
 
-/**
- * 
- * @author Bouteilloux
- * Donc ça c'est à toi de remplir Gilles
- * Il faut qu'il y ait une fonction pour que tu puisses avoir
- * des mises à jour pour ton interface.
- * L'autre groupe avait proposé pour qu'on soit sur les mêmes
- * type de donnés d'utiliser:
- * 
- * List<Object[]> listeInfoJoueur;
- *  List<Object[]> listeInfoJoueur;
- *  Object[] mesInfos = {(String Pseudo, int solde, int mise ,int statut};
- */
-
-public class InterfaceClient 
+public interface InterfaceClient extends Remote
 {
-	String pseudo;
-	int solde;
-	int mise;
-	int statut;
 	
-	//Object [] mesInfos = {pseudo, solde, mise, statut};
+	 /*
+     * recupererSesGains après fin de partie
+     * @param 
+     * - un tableau d'objet de 5 colonnes:
+     * 
+     *        pseudo	(string)
+     *        uuid		(long)
+     *        carte1	(string)
+     *        carte2	(string)
+     *        gain		(long)
+     * @return 0 si perdue, > 0 si gagné ou égalité.
+     * @throws RemoteException
+     */
 	
-	
-	 public void setListInfoJoueur(Object[] mesInfos)
-	 {
-		 
-	 }
+    public void setResultat(Object[] gagnant) throws RemoteException;
+    
+    /*
+     * Met à jour les informations du joueur
+     * @param  
+     * 
+     * - une liste de tableaux d'object de 7colonnes :
+     *                  cartesDuJoueur  (String) // Intialement à "Masquées" et
+     *                                              après Abattage
+     *                                              "valeur_id-valeur_id".
+     *                  pseudo          (String)
+     *                  solde           (long)
+     *                  mise            (long)
+     *                  statut          (String)
+     *                  
+     *    			(*  attente (* Attent de pouvoir jouer *)
+	 *		 			spectateur (* mode spectateur *)
+     *		 			couche (* s'est couché *)
+	 *		 			 petiteBlinde (* c'est lui la petite blinde *)
+	 *		  			grosseBlinde (* c'est lui la grosse blinde *)
+	 *		 			 jouer (* c'est à lui de jouer *)
+	 *     			*)
+     *                 
+     *                  numéro          (int)   
+     *                  
+     * - la valeur du pot
+     *                
+	 * @return void
+     * @throws RemoteException
+     */
+    
+    public void miseAJourTable(List<Object[]> listParticipant, long pot) throws RemoteException;
+    
+
+    /*
+     * voirCartesATable sera appelée après un tour de mise
+     * @param 
+     * - liste d'objet 
+     * 3 cartes pour le flop, 4(3+1) pour le turn et 5(4+1) pour le river
+     * pour tout autre appel, ça restera 5.
+     * 
+     * @throws RemoteException
+     */
+    
+    List<String> voirCartesATable(Object[] listCarte) throws RemoteException;
+
 }
