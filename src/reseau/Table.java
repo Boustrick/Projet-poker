@@ -2,6 +2,7 @@ package reseau;
 
 import java.util.LinkedList;
 
+
 public class Table 
 {
 	private Joueur[] listJoueur;

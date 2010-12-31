@@ -7,7 +7,7 @@ import java.util.List;
 public interface InterfaceClient extends Remote
 {
 	
-	 /*
+	 /**
      * recupererSesGains après fin de partie
      * @param 
      * - un tableau d'objet de 5 colonnes:
@@ -17,13 +17,13 @@ public interface InterfaceClient extends Remote
      *        carte1	(string)
      *        carte2	(string)
      *        gain		(long)
-     * @return 0 si perdue, > 0 si gagné ou égalité.
+     * @return void
      * @throws RemoteException
      */
 	
     public void setResultat(Object[] gagnant) throws RemoteException;
     
-    /*
+    /**
      * Met à jour les informations du joueur
      * @param  
      * 
@@ -55,16 +55,18 @@ public interface InterfaceClient extends Remote
     public void miseAJourTable(List<Object[]> listParticipant, long pot) throws RemoteException;
     
 
-    /*
+    /**
      * voirCartesATable sera appelée après un tour de mise
      * @param 
+     * 
      * - liste d'objet 
      * 3 cartes pour le flop, 4(3+1) pour le turn et 5(4+1) pour le river
      * pour tout autre appel, ça restera 5.
      * 
+     * @return void
      * @throws RemoteException
      */
     
-    List<String> voirCartesATable(Object[] listCarte) throws RemoteException;
+    public void voirCartesATable(Object[] listCarte) throws RemoteException;
 
 }
