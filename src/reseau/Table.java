@@ -57,7 +57,7 @@ public class Table
 		if (newJoueur.isDealer()) 
 		{
 			listJoueur[9] = newJoueur;
-			newJoueur.setPositionTable(10);
+			newJoueur.setPositionTable(9);
 		}
 		else
 		{
