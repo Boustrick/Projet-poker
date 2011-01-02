@@ -10,11 +10,9 @@ import java.util.StringTokenizer;
 
 public class ImpClient implements InterfaceClient {
 
-	Table table;
 	Joueur joueur;
 	
-	public ImpClient(Table tble, Joueur pj){
-		table = tble;
+	public ImpClient(Joueur pj){
 		joueur = pj;
 	}
 	
@@ -97,10 +95,21 @@ public class ImpClient implements InterfaceClient {
 			
 			Carte carte1 = new Carte(convertToInt.get(1), convertToInt.get(0));
 			Carte carte2 = new Carte(convertToInt.get(3), convertToInt.get(2));
-			
-			
+				
 			int position = (Integer) obj[6];
 			//Global.getJTable().ajoutCartesJoueur(position, carte1, carte2);
+			//ajouter les autres mise à jour
+			
+			int solde = (Integer) obj[4];
+			
+			int mise  = (Integer) obj[5];
+			
+			String statut = (String) obj[6];
+			
+			int le_pot = (int) pot;
+			
+			
+			
 		}
 	}
 
