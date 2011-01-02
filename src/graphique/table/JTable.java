@@ -1,5 +1,6 @@
 package graphique.table;
 
+import graphique.carte.Carte;
 import graphique.carte.JCarte;
 import graphique.joueur.JJoueur;
 
@@ -270,8 +271,8 @@ public class JTable extends JPanel implements ComponentListener {
 	 * @param c La carte a ajouter
 	 * @param position Position de la carte a ajouter
 	 */
-	public void ajoutCarte (JCarte c, int position) {
-		cartes.put(position, c);
+	public void ajoutCarte (Carte c, int position) {
+		cartes.put(position, new JCarte(c, carte_lg, carte_ht));
 		this.formerTable();
 	}
 
@@ -317,7 +318,7 @@ public class JTable extends JPanel implements ComponentListener {
 	 * @param c1 Premiere carte a ajouter au joueur
 	 * @param c2 Seconde carte a ajouter au joueur
 	 */
-	public void ajoutCartesJoueur (int position, JCarte c1, JCarte c2) {
+	public void ajoutCartesJoueur (int position, Carte c1, Carte c2) {
 		if (joueurs.get(position) instanceof JJoueur) {
 			((JJoueur)joueurs.get(position)).ajouterCartes (c1, c2);
 		}
@@ -344,10 +345,32 @@ public class JTable extends JPanel implements ComponentListener {
 	}
 	
 	/**
-	 * Remise a zero du pot de la table
+	 * Les vainqueurs ce partagent les gains
+	 * @param vainqueurs Vainqueurs de la donne
 	 */
-	public void razPot () {
+	public void vainqueurs (int [] vainqueurs) {
+		int gain = banque.getPot()/vainqueurs.length;
+		for (int i = 0; i < 10; i++) {
+			if (this.estGagnant(i, vainqueurs)) {
+				((JJoueur)joueurs.get(i)).ajouterGain(gain);
+			} else if (joueurs.get(i) instanceof JJoueur) {
+				((JJoueur)joueurs.get(i)).finDonne();
+			}
+		}
 		banque.raz();
+	}
+	
+	/**
+	 * On recherche si le joueur est gagnant
+	 * @param joueur Le joueur a tester
+	 */
+	private boolean estGagnant (int joueur, int [] vainqueurs) {
+		for (int j = 0; j < vainqueurs.length; j++) {
+			if (vainqueurs[j] == joueur) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -356,6 +379,55 @@ public class JTable extends JPanel implements ComponentListener {
 	 */
 	public int getPot () {
 		return banque.getPot();
+	}
+	
+	/**
+	 * Le joueur mise une somme
+	 * @param position Position du joueur qui mise
+	 * @param mise Valeur de la mise
+	 */
+	public void miser (int position, int mise) {
+		((JJoueur)joueurs.get(position)).miser(mise);
+	}
+	
+	/**
+	 * Le joueur checke
+	 * @param position Position du joueur qui checke
+	 */
+	public void checker (int position) {
+		((JJoueur)joueurs.get(position)).checker();
+	}
+	
+	/**
+	 * Le joueur se couche
+	 * @param position Position du joueur qui se couche
+	 */
+	public void seCoucher (int position) {
+		((JJoueur)joueurs.get(position)).seCoucher();
+	}
+
+	/**
+	 * Le joueur est la petite blende
+	 * @param position Position du joueur qui est la petite blende
+	 */
+	public void setPBlend (int position) {
+		((JJoueur)joueurs.get(position)).setPBlend();
+	}
+	
+	/**
+	 * Le joueur est la grande blende
+	 * @param position Position du joueur qui est la grande blende
+	 */
+	public void setGBlend (int position) {
+		((JJoueur)joueurs.get(position)).setGBlend();
+	}	
+	
+	/**
+	 * Le joueur est le dealer
+	 * @param position Position du joueur qui est le dealer
+	 */
+	public void setDealer (int position) {
+		((JJoueur)joueurs.get(position)).setDealer();
 	}
 	
 	
