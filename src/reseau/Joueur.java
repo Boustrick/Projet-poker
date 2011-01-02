@@ -9,12 +9,14 @@ public class Joueur
 {
 	private Integer UID;
 	
+	private String statut;
 	private String pseudo;
 	private String ip;
 	
 	private List<String> carte;
 	
-	private int statut;
+
+	
 	private int derniereMise;
 	private int positionTable;
 	private int solde;
@@ -32,7 +34,7 @@ public class Joueur
 		this.present = false;
 	}
 	
-	public Joueur(Integer UID, String pseudo, int statut, boolean dealer, int positionTable, int solde, String ip, 
+	public Joueur(Integer UID, String pseudo, String statut, boolean dealer, int positionTable, int solde, String ip, 
 			      InterfaceClient interfaceJoueur)
 	{
 		this.present = true;
@@ -72,7 +74,7 @@ public class Joueur
 	 * @param statut
 	 */
 	
-	public void setStatut(int statut)
+	public void setStatut(String statut)
 	{
 		this.statut = statut;
 	}
@@ -82,7 +84,7 @@ public class Joueur
 	 * @return statut
 	 */
 	
-	public int getStatut()
+	public String getStatut()
 	{
 		return statut;
 	}

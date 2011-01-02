@@ -51,7 +51,7 @@ public interface InterfaceServeur extends Remote
 	 *		 			jouer (* c'est à lui de jouer *)
 	 *     			*)
 	 *     
-     *                  numéro          (int)   
+     *                  positionTable          (int)   
 	 * 
      * @throws RemoteException
      */
@@ -104,4 +104,3 @@ public interface InterfaceServeur extends Remote
     public void recupererMesGrossesBlind(long uuid) throws RemoteException;
 
 }
-

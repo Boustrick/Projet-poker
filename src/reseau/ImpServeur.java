@@ -1,12 +1,9 @@
 package reseau;
 
-
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.LinkedList;
 import java.util.List;
-
-
 
 public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 {
@@ -50,14 +47,14 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 			/** Aucun joueur dans la partie **/
 			case(0):
 			{
-				table.setJoueur(new Joueur(UID,pseudo,1,true,0,solde,ip,interfaceJoueur));
+				table.setJoueur(new Joueur(UID,pseudo,"attente",true,0,solde,ip,interfaceJoueur));
 				System.out.println("Un nouveau joueur a été ajouter dans la partie. C'est le dealer.\nSont UID est "+UID);
 			}
 			break;
 			/** Aucune place de libre **/
 			case(10):
 			{
-				table.setAttente(new Joueur(UID,pseudo,2,false,0,solde,ip,interfaceJoueur));
+				table.setAttente(new Joueur(UID,pseudo,"spectateur",false,0,solde,ip,interfaceJoueur));
 				System.out.println("Un nouveau joueur a été ajouter dans la file d'attente.\nSont UID est "+UID);
 			}
 			break;
@@ -66,17 +63,22 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 			{
 				if (partieCommencer) 
 				{
-					table.setAttente(new Joueur(UID,pseudo,2,false,0,solde,ip,interfaceJoueur));
+					table.setAttente(new Joueur(UID,pseudo,"spectateur",false,0,solde,ip,interfaceJoueur));
 					System.out.println("Un nouveau joueur a été ajouter dans la file d'attente.\nSont UID est "+UID);
 				}
 				else 
 				{
-					table.setJoueur(new Joueur(UID,pseudo,1,false,0,solde,ip,interfaceJoueur));
+					table.setJoueur(new Joueur(UID,pseudo,"attente",false,0,solde,ip,interfaceJoueur));
 					System.out.println("Un nouveau joueur a été ajouter a la partie.\nSont UID est "+UID);
 				}
 			}
 		}
-	
+		
+		if (table.getNbJoueur()>1)
+		{
+			
+		}
+		
 		return UID;
 	}
 	
@@ -120,7 +122,7 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
      * demanderListeJoueur sera appelée à chaque changement effectué sur la
      * liste des joueurs.
      * @param UUID du joueur
-     * @return une liste de tableaux d'object de 7colonnes :
+     * @return une liste de tableaux d'object de 6 colonnes :
      *                  cartesDuJoueur  (String) // Intialement à "Masquées" et
      *                                              après Abattage
      *                                              "valeur_id-valeur_id".
@@ -144,24 +146,27 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
     	for(Joueur j : listJoueur)
     	{
     		Object[] joueur = new Object[7];
+    		List<String> cartes = j.getCarte();
     		
+    		
+    		joueur[0] = (cartes.get(0)+"-"+cartes.get(1));
     		joueur[1] = j.getPseudo();
     		joueur[2] = j.getBanque();
     		joueur[3] = j.getDerniereMise();
     		joueur[4] = j.getStatut();
-    		if (j.getStatut()==3) joueur[5] = true;
-    		else joueur[5] = false;
+    		joueur[5] = j.getPositionTable();
     	}
     	
     	for(Joueur j : listAttente)
     	{
     		Object[] joueur = new Object[7];
     		
+    		joueur[0] = "";
     		joueur[1] = j.getPseudo();
     		joueur[2] = j.getBanque();
     		joueur[3] = j.getDerniereMise();
     		joueur[4] = j.getStatut();
-    		joueur[5] = false;
+    		joueur[5] = j.getPositionTable();
     	}
     	
     	return lParticipant;
@@ -184,7 +189,7 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 			joueur.setSolde(joueur.getBanque()-(int)somme);
 			joueur.setDerniereMise((int)somme);
 			table.setPot(table.getPot()+(int)somme);
-			joueur.setStatut(1);
+			joueur.setStatut("attente");
 			
 			if (joueur.isDealer()) this.nouveauTour();
 			this.chercheJoueurSuivant(joueur);
@@ -211,7 +216,7 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 			joueur.setSolde(joueur.getBanque()-derniereMise);
 			joueur.setDerniereMise(derniereMise);
 			table.setPot(table.getPot()+derniereMise);
-			joueur.setStatut(1);
+			joueur.setStatut("attente");
 			
 			if (joueur.isDealer()) this.nouveauTour();
 			this.chercheJoueurSuivant(joueur);
@@ -234,7 +239,7 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
     public void seCoucher(long uuid)
 	{
 		Joueur joueur = table.getJoueur(uuid);
-		joueur.setStatut(3);
+		joueur.setStatut("couche");
 		
 		if (joueur.isDealer()) this.nouveauTour();
 		this.chercheJoueurSuivant(joueur);
@@ -259,22 +264,14 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 	 * @param UID
 	 */
 	
-	public void startGame(int UID)
+	private void startGame()
 	{
-		Joueur joueur = table.getJoueur(UID);
-		if (joueur.isDealer() && table.getNbJoueur()!=1 )
-		{
-			partieCommencer = true;
-			nbTour = 1;
+		partieCommencer = true;
+		nbTour = 1;
 			
-			joueur = table.getJoueurSuivant(UID);
-			joueur.setStatut(4);
-		}
-		else
-		{
-			if (table.getNbJoueur()==1) System.out.println("Pas assez de joueur pour lancer la partie.");
-			else System.out.println("Triche détectée: Le joueur "+table.getJoueur(UID).getPseudo()+" essaye de lancer la partie.");
-		}
+		Joueur[] listJoueur = table.getListJoueur();
+		Joueur joueur = listJoueur[0];
+		joueur.setStatut("petiteBlinde");
 	}
 	
 	 /**
@@ -293,7 +290,7 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 		{
 			table.setPot(table.getPot()+petiteBlinde);
 			joueur.setSolde(joueur.getBanque()-petiteBlinde);
-			joueur.setStatut(3);
+			joueur.setStatut("attente");
 			
 			if (joueur.isDealer()) this.nouveauTour();
 			this.chercheJoueurSuivant(joueur);
@@ -317,7 +314,7 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 		{
 			table.setPot(table.getPot()+grosseBlinde);
 			joueur.setSolde(joueur.getBanque()-grosseBlinde);
-			joueur.setStatut(3);
+			joueur.setStatut("attente");
 			
 			if (joueur.isDealer()) this.nouveauTour();
 			this.chercheJoueurSuivant(joueur);
@@ -371,16 +368,16 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 		{
 			joueur = table.getJoueurSuivant(joueur.getUID());
 				
-			if (joueur.getStatut()==1) 
+			if (joueur.getStatut()=="attente") 
 			{
-				joueur.setStatut(6);
+				joueur.setStatut("jouer");
 				trouver = true;
 			}
 				
-			if (joueur.isDealer() && joueur.getStatut() == 3)
+			if (joueur.isDealer() && joueur.getStatut() == "coucher")
 			{
 				joueur = table.getJoueurSuivant(joueur.getUID());
-				joueur.setStatut(6);
+				
 				trouver = true;
 			}
 		}
