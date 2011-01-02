@@ -1,6 +1,6 @@
 package graphique.joueur;
 
-import graphique.carte.JCarte;
+import graphique.carte.Carte;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,7 +12,7 @@ import javax.swing.border.LineBorder;
 
 @SuppressWarnings("serial")
 public class JJoueur extends JPanel {
-	public JJoueur () {
+	public JJoueur (String pseudo, int banque, int type) {
 		//Ajout du layout
 		this.setLayout(new GridLayout(2, 1));
 		
@@ -32,7 +32,7 @@ public class JJoueur extends JPanel {
 	}
 	
 	// Ajouter les cartes d'un joueur
-	public void ajouterCartes (JCarte c1, JCarte c2) {
+	public void ajouterCartes (Carte c1, Carte c2) {
 		
 	}
 	
@@ -40,6 +40,44 @@ public class JJoueur extends JPanel {
 	public void effacerCartes () {
 		
 	}
-
 	
+	// Mise du joueur
+	public void miser (int mise) {
+		
+	}
+	
+	// Le joueur checke
+	public void checker () {
+		
+	}
+	
+	// Le joueur ce couche
+	public void seCoucher () {
+		
+	}
+	
+	// Le joueur est la petite blende
+	public void setPBlend () {
+		
+	}
+	
+	// Le joueur est la grande blende
+	public void setGBlend () {
+		
+	}
+	
+	// Le joueur est le dealer
+	public void setDealer () {
+		
+	}
+	
+	// Le joueur gagne la donne
+	public void ajouterGain (int gain) {
+		
+	}
+	
+	// Fin de la donne
+	public void finDonne () {
+		
+	}
 }
