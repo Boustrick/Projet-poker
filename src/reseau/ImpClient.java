@@ -110,4 +110,3 @@ public class ImpClient implements InterfaceClient {
 	}
 
 }
->>>>>>> refs/remotes/gilles/master
