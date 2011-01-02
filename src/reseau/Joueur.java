@@ -1,6 +1,7 @@
 package reseau;
 
 
+import java.net.InetAddress;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,7 +12,7 @@ public class Joueur
 	
 	private String statut;
 	private String pseudo;
-	private String ip;
+	private InetAddress ip;
 	
 	private List<String> carte;
 	
@@ -34,7 +35,7 @@ public class Joueur
 		this.present = false;
 	}
 	
-	public Joueur(Integer UID, String pseudo, String statut, boolean dealer, int positionTable, int solde, String ip, 
+	public Joueur(Integer UID, String pseudo, String statut, boolean dealer, int positionTable, int solde, InetAddress ip, 
 			      InterfaceClient interfaceJoueur)
 	{
 		this.present = true;
@@ -166,11 +167,11 @@ public class Joueur
 		return solde;
 	}
 
-	public void setIp(String ip) {
+	public void setIp(InetAddress ip) {
 		this.ip = ip;
 	}
 
-	public String getIp() {
+	public InetAddress getIp() {
 		return ip;
 	}
 

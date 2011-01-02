@@ -1,5 +1,6 @@
 package reseau;
 
+import java.net.InetAddress;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.LinkedList;
@@ -33,7 +34,7 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 	{
 		String pseudo = (String)obj[0];
 		int solde = (Integer)obj[1];
-		String ip = (String)obj[2];
+		InetAddress ip = (InetAddress)obj[2];
 		InterfaceClient interfaceJoueur = (InterfaceClient)obj[3];
 		
 		
