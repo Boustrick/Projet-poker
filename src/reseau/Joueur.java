@@ -157,11 +157,12 @@ public class Joueur
 		return mainEnvoyee;
 	}
 
-	public void setSolde(int solde) {
+	public void setSolde(int solde) 
+	{
 		this.solde = solde;
 	}
 
-	public int getBanque() {
+	public int getSolde() {
 		return solde;
 	}
 

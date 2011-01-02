@@ -158,6 +158,16 @@ public class Table
 	}
 	
 	/**
+	 * Transfert un joueur d'une liste à une autre
+	 * @param uuid
+	 */
+	
+	public void transfertJoueur(long uuid)
+	{
+		
+	}
+	
+	/**
 	 * Ajoute un jouer dans la file d'attente de jeu
 	 * @param joueur
 	 */
