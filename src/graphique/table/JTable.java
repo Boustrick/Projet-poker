@@ -258,11 +258,20 @@ public class JTable extends JPanel implements ComponentListener {
 	/***************** Modification de la table ************************/
 	/**
 	 * Ajoute un joueur a la table
-	 * @param j Le joueur a ajouter
+	 * @param pseudo Nom du joueur
+	 * @param banque Banque du joueur
 	 * @param position Position du joueur a ajouter
 	 */
-	public void ajoutJoueur (JJoueur j, int position) {
-		joueurs.put(position, j);
+	public void ajoutJoueur (String pseudo, int banque, int position) {
+		int type = 0;
+		if ((position == 2)||(position == 3)) {
+			type = 1;
+		} else if ((position >= 4)&&(position <= 6)) {
+			type = 2;
+		} else if ((position == 7)||(position == 8)) {
+			type = 3;
+		}
+		joueurs.put(position, new JJoueur(pseudo, banque, type, joueur_lg, joueur_ht));
 		this.formerTable();
 	}
 
