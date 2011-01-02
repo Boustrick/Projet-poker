@@ -55,7 +55,7 @@ public interface InterfaceServeur extends Remote
 	 * 
      * @throws RemoteException
      */
-	List<Object[]> demanderListeJoueur(long uuid) throws RemoteException;
+	List<Object[]> demanderListeJoueur() throws RemoteException;
 	
 	/*
      * relancer appelée par les joueurs se tenant après la grosse blinde
@@ -82,10 +82,9 @@ public interface InterfaceServeur extends Remote
     /*
      * faireTapis appelée si un joueur a un bon jeu et veut tour miser
      * @param UUID du joueur
-     * @param somme à miser
      * @throws RemoteException
      */
-    void faireTapis(long uuid, long somme) throws RemoteException;
+    void faireTapis(long uuid) throws RemoteException;
     
     /*
      * recupererMesPetitesBlind appelée pour demander au dealer de récupérer
