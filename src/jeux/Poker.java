@@ -10,6 +10,8 @@ import java.awt.GridBagLayout;
 
 import javax.swing.JFrame;
 
+import reseau.Global;
+
 /**
  * Lancement du jeux
  *@author Fabien
@@ -33,7 +35,7 @@ public class Poker {
 	public void lancementPartie (String pseudo) {
 		JFrame frame = new JFrame("Poker - " + pseudo);
 		frame.setResizable(false);
-		JTable table = new JTable();
+		JTable table = Global.getJTable(); // créé dans la classe Global
 		PanelBoutons boutons = new PanelBoutons();
 		ActionsBoutons AcBtn = new ActionsBoutons(boutons);
 		frame.setBounds(5, 5, 1270, 750);

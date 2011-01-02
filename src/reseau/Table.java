@@ -14,6 +14,7 @@ public class Table
 	private int pot;
 	private int petiteBlinde;
 	private int derniereMise;
+	private int nbJoueur;
 	
 	private boolean petiteB;
 	private boolean grosseB;
@@ -22,6 +23,7 @@ public class Table
 	public Table(int petiteBlinde)
 	{
 		pot = 0;
+		nbJoueur = 0;
 		this.petiteBlinde = petiteBlinde;
 		
 		listJoueur = new Joueur[10];
@@ -72,6 +74,7 @@ public class Table
 				}
 			}
 		}
+		nbJoueur++;
 	}
 	
 	/**
@@ -151,13 +154,6 @@ public class Table
 	
 	public int getNbJoueur()
 	{
-		int nbJoueur = 0;
-		
-		for(int i=0;i<10;i++)
-		{
-			Joueur joueur = listJoueur[i];
-			if(joueur.isPresent()) nbJoueur++;
-		}
 		return nbJoueur;
 	}
 	
@@ -239,7 +235,8 @@ public class Table
 		return listCarteTable;
 	}
 
-	public void setPetiteB(boolean petiteB) {
+	public void setPetiteB(boolean petiteB) 
+	{
 		this.petiteB = petiteB;
 	}
 
@@ -247,7 +244,8 @@ public class Table
 		return petiteB;
 	}
 
-	public void setGrosseB(boolean grosseB) {
+	public void setGrosseB(boolean grosseB) 
+	{
 		this.grosseB = grosseB;
 	}
 
