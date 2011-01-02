@@ -3,6 +3,8 @@ package graphique.boutons;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import reseau.Global;
+
 /*****************************************
  * Classe qui traite l'action attaqué aux boutons
  * @author Benjamin
@@ -33,26 +35,34 @@ public class ActionsBoutons implements ActionListener {
 		}
 		/****** Bouton Suivre ******/
 		else if(e.getSource()==boutons.getSuivre()){
+			Global.poker.gestionActions(2);
 			System.out.println("Suivre");
 		}
 		/****** Bouton Relance ******/
 		else if(e.getSource()==boutons.getValiderRelance()){
 			int mises=Integer.parseInt(boutons.getMises().getText());
+			Global.mise = mises;
+			Global.poker.gestionActions(3);
 			System.out.println("Relance de "+mises);
+			
 		}
 		/****** Bouton Se Coucher ******/
 		else if(e.getSource()==boutons.getSeCoucher()){
+			Global.poker.gestionActions(5);
 			System.out.println("Se coucher");
 			//Changement de panel affiche le bouton rejoindre
 			boutons.changementPanel(PanelBoutons.QUITTER);
 		}
 		/****** Bouton Tapis ******/
 		else if(e.getSource()==boutons.getTapis()){
+			Global.poker.gestionActions(4);
 			System.out.println("Tapis");
 		}
 		/****** Bouton Rejoindre ******/
 		else if(e.getSource()==boutons.getRejoindre()){
 			System.out.println("Rejoindre");
+			Global.poker.gestionConnexion();
+			
 			//Changement de panel afficher les boutons.
 			boutons.changementPanel(PanelBoutons.ACTIONS);
 		}

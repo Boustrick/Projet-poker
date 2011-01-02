@@ -8,7 +8,7 @@ public interface InterfaceServeur extends Remote
 {
 
 	/*
-     * envoiInformationsJoueur appelée après connexion du joueur avec le serveur
+     * envoiInformationsJoueur appelï¿½e aprï¿½s connexion du joueur avec le serveur
      * @param une liste d'objet de taille 3 : pseudo, solde, ip
      * @return UUID du joueur, ex : return (long)(Math.random()*1000000);
      * @throws RemoteException
@@ -16,12 +16,12 @@ public interface InterfaceServeur extends Remote
 	long envoiInformationsJoueur(Object[] obj) throws RemoteException;
 	
 	/*
-     * demandeSesCartes utilisé après vérification que les petites et grosses
-     * blindes ont été faites
+     * demandeSesCartes utilisï¿½ aprï¿½s vï¿½rification que les petites et grosses
+     * blindes ont ï¿½tï¿½ faites
      * @param l'UUID du joueur
      * @return retourne une liste de String contenant les deux cartes pour
      * le joueur, les cartes sont de la forme : valeur_id (exemple "13_1")
-     *         correspond à l'as de coeur. Voici un exemple de création :
+     *         correspond ï¿½ l'as de coeur. Voici un exemple de crï¿½ation :
      *                 carte = new ArrayList<String>();
      *                 for(int valeur=1; valeur<14; valeur++){
      *                   for(int id=1; id<=4; id++)
@@ -31,12 +31,12 @@ public interface InterfaceServeur extends Remote
 	List<String> demandeSesCartes(long uuid)  throws RemoteException;
 	
 	 /*
-     * demanderListeJoueur sera appelée à chaque changement effectué sur la
+     * demanderListeJoueur sera appelï¿½e ï¿½ chaque changement effectuï¿½ sur la
      * liste des joueurs.
      * @param UUID du joueur
      * @return une liste de tableaux d'object de 7colonnes :
-     *                  cartesDuJoueur  (String) // Intialement à "Masquées" et
-     *                                              après Abattage
+     *                  cartesDuJoueur  (String) // Intialement ï¿½ "Masquï¿½es" et
+     *                                              aprï¿½s Abattage
      *                                              "valeur_id-valeur_id".
      *                  pseudo          (String)
      *                  solde           (long)
@@ -45,10 +45,10 @@ public interface InterfaceServeur extends Remote
      *                  
      *    			(*  attente (* Attent de pouvoir jouer *)
 	 *		 			spectateur (* mode spectateur *)
-     *		 			couche (* s'est couché *)
+     *		 			couche (* s'est couchï¿½ *)
 	 *		 			petiteBlinde (* c'est lui la petite blinde *)
 	 *		  			grosseBlinde (* c'est lui la grosse blinde *)
-	 *		 			jouer (* c'est à lui de jouer *)
+	 *		 			jouer (* c'est ï¿½ lui de jouer *)
 	 *     			*)
 	 *     
      *                  positionTable          (int)   
@@ -58,45 +58,45 @@ public interface InterfaceServeur extends Remote
 	List<Object[]> demanderListeJoueur() throws RemoteException;
 	
 	/*
-     * relancer appelée par les joueurs se tenant après la grosse blinde
+     * relancer appelï¿½e par les joueurs se tenant aprï¿½s la grosse blinde
      * @param UUID du joueur
-     * @param somme à miser
+     * @param somme ï¿½ miser
      * @throws RemoteException
      */
     void relancer(long uuid, long somme) throws RemoteException;
 	
     /*
-     * suivre appelée par les joueurs se tenant après la grosse blinde
+     * suivre appelï¿½e par les joueurs se tenant aprï¿½s la grosse blinde
      * @param UUID du joueur
      * @throws RemoteException
      */
     void suivre(long uuid) throws RemoteException;
     
     /*
-     * seCoucher appelée si un joueur décide de se coucher
+     * seCoucher appelï¿½e si un joueur dï¿½cide de se coucher
      * @param UUID du joueur
      * @throws RemoteException
      */
     void seCoucher(long uuid) throws RemoteException;
 	
     /*
-     * faireTapis appelée si un joueur a un bon jeu et veut tour miser
+     * faireTapis appelï¿½e si un joueur a un bon jeu et veut tour miser
      * @param UUID du joueur
      * @throws RemoteException
      */
     void faireTapis(long uuid) throws RemoteException;
     
     /*
-     * recupererMesPetitesBlind appelée pour demander au dealer de récupérer
-     * les petites blindes et décrémenter son solde
+     * recupererMesPetitesBlind appelï¿½e pour demander au dealer de rï¿½cupï¿½rer
+     * les petites blindes et dï¿½crï¿½menter son solde
      * @param UUID du joueur
      * @throws RemoteException
      */
     public void recupererMesPetitesBlind(long uuid) throws RemoteException;
     
     /*
-     * recupererMesGrossesBlind appelée pour demander au dealer de récupérer
-     * les grosses blindes et décrémenter son solde
+     * recupererMesGrossesBlind appelï¿½e pour demander au dealer de rï¿½cupï¿½rer
+     * les grosses blindes et dï¿½crï¿½menter son solde
      * @param UUID du joueur
      * @throws RemoteException
      */

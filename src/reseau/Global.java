@@ -1,18 +1,18 @@
 package reseau;
 
+import jeux.Poker;
 import graphique.table.JTable;
 
 public class Global {
 
 	private static JTable jtable;
-	private static Table table;
+	public static Poker poker;
+	public static InterfaceServeur interS;
+	public static InterfaceClient interC;
+	public static String pseudo;
+	public static long uuid;
 	
-	public static Table getTable(int petiteBlinde){
-		if(table == null){
-			table = new Table(petiteBlinde);
-		}
-		return table;
-	}
+	public static int mise;
 
 	public static JTable getJTable(){
 		if(jtable == null){
@@ -21,5 +21,7 @@ public class Global {
 		
 		return jtable;
 	}
+	
+
 	
 }
