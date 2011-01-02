@@ -249,6 +249,17 @@ public class PanelBoutons extends JPanel {
 	    }
 	}
 	
+	
+	/*************************************************
+	 * Efface ou affiche le bouton de check ou affiche.
+	 * @param boolean visible ou non
+	 *************************************************/
+	public void effaceOuAfficheLeBoutonCheck(boolean visible) {
+		check.setVisible(visible);
+	}
+	
+	
+	
 	/*****************************************************************
 	 * Classe qui permet de gerer les modifications de la slide bar
 	 * @author Benjamin
