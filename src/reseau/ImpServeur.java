@@ -88,6 +88,7 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 			this.startGame();
 			this.transmettreAction();
 		}
+		else this.transmettreAction();
 		
 		return UID;
 	}

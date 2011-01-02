@@ -27,7 +27,15 @@ public class Table
 		this.petiteBlinde = petiteBlinde;
 		
 		listJoueur = new Joueur[10];
+		for (int i = 0;i<10;i++)
+		{
+			listJoueur[i] = new Joueur(); 
+		}
 		listAttente = new Joueur[10];
+		for (int i = 0;i<10;i++)
+		{
+			listJoueur[i] = new Joueur(); 
+		}
 		
 		listCarte = new LinkedList<String>();
 		listCarteTable = new LinkedList<String>();
