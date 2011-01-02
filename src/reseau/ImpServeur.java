@@ -32,16 +32,24 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 	
 	public long envoiInformationsJoueur(Object[] obj)
 	{
+		System.out.println("Récuperation pseudo.");
 		String pseudo = (String)obj[0];
+		System.out.println("Récuperation solde.");
 		int solde = (Integer)obj[1];
+		System.out.println("Récuperation adresse.");
 		InetAddress ip = (InetAddress)obj[2];
+		System.out.println("Récuperation interface.");
 		InterfaceClient interfaceJoueur = (InterfaceClient)obj[3];
+		
+		System.out.println("Récuperation réussit !!!");
 		
 		
 		int lower = 0;
 		int higher = 1000;
 
 		int UID = (int)(Math.random() * (higher-lower)) + lower;
+		
+		System.out.println("UUID initialisé.");
 		
 		switch (table.getNbJoueur())
 		{
