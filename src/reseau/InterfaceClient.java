@@ -31,6 +31,8 @@ public interface InterfaceClient extends Remote
      *                  cartesDuJoueur  (String) // Intialement à "Masquées" et
      *                                              après Abattage
      *                                              "valeur_id-valeur_id".
+     *                  adresseIP		(String)
+     *                  uuid			(long)
      *                  pseudo          (String)
      *                  solde           (long)
      *                  mise            (long)

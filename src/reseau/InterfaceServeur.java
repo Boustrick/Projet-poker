@@ -104,4 +104,3 @@ public interface InterfaceServeur extends Remote
     public void recupererMesGrossesBlind(long uuid) throws RemoteException;
 
 }
-

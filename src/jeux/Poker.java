@@ -36,7 +36,7 @@ public class Poker {
 		JTable table = new JTable();
 		PanelBoutons boutons = new PanelBoutons();
 		ActionsBoutons AcBtn = new ActionsBoutons(boutons);
-		frame.setBounds(5, 5, 1280, 720);
+		frame.setBounds(5, 5, 1270, 750);
 		GridBagLayout layout = new GridBagLayout();
 		GridBagConstraints constraints = new GridBagConstraints();
 		frame.setLayout(layout);
@@ -52,7 +52,7 @@ public class Poker {
 		layout.addLayoutComponent(boutons, constraints);
 		frame.add(boutons);
 		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }
 
