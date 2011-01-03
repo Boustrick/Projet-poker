@@ -70,5 +70,8 @@ public interface InterfaceClient extends Remote
      */
     
     public void voirCartesATable(Object[] listCarte) throws RemoteException;
+    
+    
+    public void donnerCarte(List<String> carte) throws RemoteException;
 
 }
