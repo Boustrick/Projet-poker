@@ -1,7 +1,6 @@
 package reseau;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.List;
 
 
 public interface InterfaceServeur extends Remote
@@ -14,33 +13,6 @@ public interface InterfaceServeur extends Remote
      * @throws RemoteException
      */
 	long envoiInformationsJoueur(Object[] obj) throws RemoteException;
-	
-	 /*
-     * demanderListeJoueur sera appel�e � chaque changement effectu� sur la
-     * liste des joueurs.
-     * @param UUID du joueur
-     * @return une liste de tableaux d'object de 7colonnes :
-     *                  cartesDuJoueur  (String) // Intialement � "Masqu�es" et
-     *                                              apr�s Abattage
-     *                                              "valeur_id-valeur_id".
-     *                  pseudo          (String)
-     *                  solde           (long)
-     *                  mise            (long)
-     *                  statut          (String)
-     *                  
-     *    			(*  attente (* Attent de pouvoir jouer *)
-	 *		 			spectateur (* mode spectateur *)
-     *		 			couche (* s'est couch� *)
-	 *		 			petiteBlinde (* c'est lui la petite blinde *)
-	 *		  			grosseBlinde (* c'est lui la grosse blinde *)
-	 *		 			jouer (* c'est � lui de jouer *)
-	 *     			*)
-	 *     
-     *                  positionTable          (int)   
-	 * 
-     * @throws RemoteException
-     */
-	List<Object[]> demanderListeJoueur() throws RemoteException;
 	
 	/*
      * relancer appel�e par les joueurs se tenant apr�s la grosse blinde

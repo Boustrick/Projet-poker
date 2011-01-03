@@ -84,68 +84,14 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 		}
 		
 		if (table.getNbJoueur()>1) this.startGame();
+		this.transmettreAction();
 		
 		return UID;
 	}
 	
     
     
-    /**
-     * demanderListeJoueur sera appelée à chaque changement effectué sur la
-     * liste des joueurs.
-     * @param UUID du joueur
-     * @return une liste de tableaux d'object de 6 colonnes :
-     *                  pseudo          (String)
-     *                  solde           (long)
-     *                  mise            (long)
-     *                  statut          (String)
-     * (* Normalement le statut indique s'il peut jouer ou pas *)
-     *                  numéro          (int)   
-	 * 
-     * @throws RemoteException
-     */
     
-    public List<Object[]> demanderListeJoueur()
-    {
-    	List<Object[]> lParticipant = new LinkedList<Object[]>();
-    	
-    	Joueur[] listJoueur = table.getListJoueur();
-    	Joueur[] listAttente = table.getListJoueur();
-    	
-    	for(Joueur j : listJoueur)
-    	{
-    		if(j.isPresent())
-    		{
-    			Object[] joueur = new Object[7];
-    			List<String> cartes = j.getCarte();
-    		
-    		
-    			joueur[0] = (cartes.get(0)+"-"+cartes.get(1));
-    			joueur[1] = j.getPseudo();
-    			joueur[2] = j.getSolde();
-    			joueur[3] = j.getDerniereMise();
-    			joueur[4] = j.getStatut();
-    			joueur[5] = j.getPositionTable();
-    		}
-    	}
-    	
-    	for(Joueur j : listAttente)
-    	{
-    		if(j.isPresent())
-    		{
-    			Object[] joueur = new Object[7];
-    		
-    			joueur[0] = "";
-    			joueur[1] = j.getPseudo();
-    			joueur[2] = j.getSolde();
-    			joueur[3] = j.getDerniereMise();
-    			joueur[4] = j.getStatut();
-    			joueur[5] = j.getPositionTable();
-    		}
-    	}
-    	
-    	return lParticipant;
-    }
 	
     /*
      * relancer appelée par les joueurs se tenant après la grosse blinde
@@ -369,6 +315,11 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 				String carte1 = table.getNewCarte();
 				String carte2 = table.getNewCarte();
 				j.setCarte(carte1, carte2);	
+				
+				try 
+				{
+					interC.donnerCarte(j.getCarte());
+				} catch (RemoteException e) {e.printStackTrace();}
 			}
 		}
 	}
@@ -438,7 +389,59 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 			}
 		}
 	}
-	
+	/**
+     * demanderListeJoueur sera appelée à chaque changement effectué sur la
+     * liste des joueurs.
+     * @param UUID du joueur
+     * @return une liste de tableaux d'object de 6 colonnes :
+     *                  pseudo          (String)
+     *                  solde           (long)
+     *                  mise            (long)
+     *                  statut          (String)
+     * (* Normalement le statut indique s'il peut jouer ou pas *)
+     *                  numéro          (int)   
+	 * 
+     * @throws RemoteException
+     */
+    
+    private List<Object[]> demanderListeJoueur()
+    {
+    	List<Object[]> lParticipant = new LinkedList<Object[]>();
+    	
+    	Joueur[] listJoueur = table.getListJoueur();
+    	Joueur[] listAttente = table.getListJoueur();
+    	
+    	for(Joueur j : listJoueur)
+    	{
+    		if(j.isPresent())
+    		{
+    			Object[] joueur = new Object[7];
+    		
+    			joueur[0] = j.getPseudo();
+    			joueur[1] = j.getSolde();
+    			joueur[2] = j.getDerniereMise();
+    			joueur[3] = j.getStatut();
+    			joueur[4] = j.getPositionTable();
+    		}
+    	}
+    	
+    	for(Joueur j : listAttente)
+    	{
+    		if(j.isPresent())
+    		{
+    			Object[] joueur = new Object[7];
+    		
+    			joueur[0] = j.getPseudo();
+    			joueur[1] = j.getSolde();
+    			joueur[2] = j.getDerniereMise();
+    			joueur[3] = j.getStatut();
+    			joueur[4] = j.getPositionTable();
+    		}
+    	}
+    	
+    	return lParticipant;
+    }
+    
 	/**
 	 * Permet de transmettre une action faite d'un joueur
 	 * à toutes les personnes.
