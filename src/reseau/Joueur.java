@@ -52,6 +52,8 @@ public class Joueur
 		this.setGrosseBlinde(true);
 		this.setDealer(dealer);
 		this.setPositionTable(positionTable);
+		this.carte.add(null);
+		this.carte.add(null);
 		
 	}
 	

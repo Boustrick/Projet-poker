@@ -83,50 +83,11 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 			}
 		}
 		
-		if (table.getNbJoueur()>1)
-		{
-			this.startGame();
-			this.transmettreAction();
-		}
-		else this.transmettreAction();
+		if (table.getNbJoueur()>1) this.startGame();
 		
 		return UID;
 	}
 	
-	/**
-     * demandeSesCartes utilisé après vérification que les petites et grosses
-     * blindes ont été faites
-     * @param l'UUID du joueur
-     * @return retourne une liste de String contenant les deux cartes pour
-     * le joueur, les cartes sont de la forme : valeur_id (exemple "13_1")
-     *         correspond à l'as de coeur. Voici un exemple de création :
-     *                 carte = new ArrayList<String>();
-     *                 for(int valeur=1; valeur<14; valeur++){
-     *                   for(int id=1; id<=4; id++)
-     *                   carte.add(valeur+"_"+id);
-     * @throws RemoteException
-     */
-	
-    public List<String> demandeSesCartes(long uuid)
-	{
-    	List<String> carte = new LinkedList<String>();
-    	
-		System.out.println("Demande de carte lancée.");
-		
-		if ( !table.getJoueur(uuid).isMainEnvoyee() && table.isPetiteB() && table.isGrosseB())
-		{
-			String carte1 = table.getNewCarte();
-			String carte2 = table.getNewCarte();
-
-			carte.add(carte1);
-			carte.add(carte2);
-		}
-		else
-		{
-			System.out.println("Demande incorrecte a était lancé");
-		}
-		return carte;
-	}
     
     
     /**
@@ -134,9 +95,6 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
      * liste des joueurs.
      * @param UUID du joueur
      * @return une liste de tableaux d'object de 6 colonnes :
-     *                  cartesDuJoueur  (String) // Intialement à "Masquées" et
-     *                                              après Abattage
-     *                                              "valeur_id-valeur_id".
      *                  pseudo          (String)
      *                  solde           (long)
      *                  mise            (long)
@@ -389,9 +347,32 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 		{
 			table.transfertJoueur(uuid);
 		}
+		
+		if (nbTour==1) this.donnerCartes();
 	}
 	
    
+    /**
+     * Transmet les cartes de jeu aux joueurs
+     * @return void
+     */
+    
+	private void donnerCartes() 
+	{
+		Joueur[] listJoueur = table.getListJoueur();
+		
+		for(Joueur j : listJoueur)
+		{
+			if (j.isPresent())
+			{
+				InterfaceClient interC = j.getInterfaceClient();
+				String carte1 = table.getNewCarte();
+				String carte2 = table.getNewCarte();
+				j.setCarte(carte1, carte2);	
+			}
+		}
+	}
+
 	/**
 	 * Permet de tirer le flop
 	 */

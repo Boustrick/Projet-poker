@@ -15,21 +15,6 @@ public interface InterfaceServeur extends Remote
      */
 	long envoiInformationsJoueur(Object[] obj) throws RemoteException;
 	
-	/*
-     * demandeSesCartes utilis� apr�s v�rification que les petites et grosses
-     * blindes ont �t� faites
-     * @param l'UUID du joueur
-     * @return retourne une liste de String contenant les deux cartes pour
-     * le joueur, les cartes sont de la forme : valeur_id (exemple "13_1")
-     *         correspond � l'as de coeur. Voici un exemple de cr�ation :
-     *                 carte = new ArrayList<String>();
-     *                 for(int valeur=1; valeur<14; valeur++){
-     *                   for(int id=1; id<=4; id++)
-     *                   carte.add(valeur+"_"+id);
-     * @throws RemoteException
-     */
-	List<String> demandeSesCartes(long uuid)  throws RemoteException;
-	
 	 /*
      * demanderListeJoueur sera appel�e � chaque changement effectu� sur la
      * liste des joueurs.
