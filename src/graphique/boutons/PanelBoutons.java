@@ -21,6 +21,7 @@ import javax.swing.event.ChangeListener;
  * @author Benjamin
  * @version 0.1
  ****************************************************/
+@SuppressWarnings("serial")
 public class PanelBoutons extends JPanel {
 	public static int REJOINDRE=1;
 	public static int QUITTER=2;
