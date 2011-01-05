@@ -40,7 +40,7 @@ public class Connexion {
 			InterfaceServeur inter = null;
 			try 
 			{
-				inter=(InterfaceServeur)Naming.lookup("rmi://localhost/poker");
+				inter=(InterfaceServeur)Naming.lookup("rmi://192.168.1.32/poker");
 			} catch (RemoteException e) {
 				e.printStackTrace();
 			} catch (NotBoundException e) {
