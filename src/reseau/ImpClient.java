@@ -160,29 +160,9 @@ public class ImpClient implements InterfaceClient, Serializable {
      *                   carte.add(valeur+"_"+id);
      * @throws RemoteException
      */
-	public void donnerCarte(List<String> carte) {	
+	public void donnerCarte(String ct1, String ct2) {	
+		System.out.println("passe donner carte");
 		
-		List<String> splitCartes = new ArrayList<String>();
-		for(String cart : carte){
-			StringTokenizer stt = new StringTokenizer(cart, "_");
-			while ( stt.hasMoreTokens() ) {
-				splitCartes.add(stt.nextToken());
-			}
-		}
-		// On a une liste de string avec les valeurs dans l'ordre
-		
-		List<Integer> convertToInt = new ArrayList<Integer>();
-		for(String spli : splitCartes){
-			convertToInt.add(Integer.parseInt(spli));
-		}
-		
-		Carte carte1 = new Carte(convertToInt.get(1), convertToInt.get(0));
-		Carte carte2 = new Carte(convertToInt.get(3), convertToInt.get(2));
-		
-		JTable jtable = Global.getJTable();
-		
-		//int position = (Integer) obj[6];
-		jtable.ajoutCartesJoueur(3, carte1, carte2);
 		
 		System.out.println("passe donner carte");
 	}
