@@ -12,6 +12,7 @@ public class Global {
 	public static String pseudo;
 	public static long uuid;
 	public static String ip;
+	public static boolean dealer;
 	
 	public static int mise;
 
