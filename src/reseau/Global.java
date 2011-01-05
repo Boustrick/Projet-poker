@@ -13,6 +13,7 @@ public class Global {
 	public static long uuid;
 	public static String ip;
 	public static boolean dealer;
+	public static int position;
 	
 	public static int mise;
 

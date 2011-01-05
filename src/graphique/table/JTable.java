@@ -256,7 +256,6 @@ public class JTable extends JPanel {
 	 * @param position Position du joueur a ajouter
 	 */
 	public void ajoutJoueur (String pseudo, int banque, int position) {
-		System.out.println("Ta vue c'est toi qui a merdé!!!");
 		int type = 0;
 		if ((position == 2)||(position == 3)) {
 			type = 1;
