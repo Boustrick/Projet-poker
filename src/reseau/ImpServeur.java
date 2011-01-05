@@ -114,7 +114,7 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 	}
 	
     
-    /*
+    /**
      * relancer appelée par les joueurs se tenant après la grosse blinde
      * @param UUID du joueur
      * @param somme à miser
@@ -589,10 +589,26 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 		}
 	}
 	
-	 public boolean quitter(long uuid)
-	 {
-		 return false;
-	 }
+	/**
+	 * Permet au joueur de quitter la partie
+	 * si il est couché ou en attente.
+	 * @param uuid
+	 * @return true si le joueur a quitter
+	 *         false s'il n'est pas en position de quitter
+	 */
+	
+	public boolean quitter(long uuid)
+	{
+		Joueur joueur = table.getJoueur(uuid);
+		boolean quitterPartie = false;
+		if(joueur==null | joueur.getStatut().equals("coucher"));
+		{
+			table.enleverJoueur(uuid);
+			quitterPartie = true;
+		}
+
+		return quitterPartie;
+	}
 	 
 	/**
 	 * Fait passer au tour suivant

@@ -43,7 +43,7 @@ public class Table
 		}
 		
 		listCarteTable = new LinkedList<String>();
-		setListUUID(new LinkedList<Integer>());
+		listUUID = new LinkedList<Integer>();
 		setListCarteDistrib(new LinkedList<String>());
 		
 		setPetiteB(false);
@@ -240,22 +240,38 @@ public class Table
 	}
 	
 	/**
-	 * Permet d'enlever un joueur de la liste des joueurs
+	 * Permet d'enlever un joueur dans la liste
+	 * des joueur ou dans la liste d'attente
 	 * @param uuid
 	 */
 	
 	public void enleverJoueur(long uuid)
 	{
 		int i = 0;
-		Joueur joueur;
 		
-		while(i<10)
+		/** Recherche dans la liste des joueurs **/
+		for(Joueur joueur : listJoueur)
 		{
-			joueur = listJoueur[i];
-			if (joueur.getUID().equals(uuid))
+			if (joueur.isPresent() && joueur.getUID().equals(uuid))
 			{
 				listJoueur[i] = new Joueur();
 				nbJoueur--;
+				if (listUUID.remove(uuid)) System.out.println("Suppression du joueur réussit.");
+				else  System.out.println("Erreur lors de la suppression du joueur");
+				break;
+			}
+			i++;
+		}
+		/** Recherche dans la liste d'attente **/
+		for(Joueur joueur : listAttente)
+		{
+			if (joueur.isPresent() && joueur.getUID().equals(uuid))
+			{
+				listJoueur[i] = new Joueur();
+				nbJoueur--;
+				if (listUUID.remove(uuid)) System.out.println("Suppression du spectateur réussit.");
+				else  System.out.println("Erreur lors de la suppression du spectateur");
+				break;
 			}
 			i++;
 		}
@@ -276,7 +292,8 @@ public class Table
 		this.petiteB = petiteB;
 	}
 
-	public boolean isPetiteB() {
+	public boolean isPetiteB() 
+	{
 		return petiteB;
 	}
 
@@ -300,19 +317,23 @@ public class Table
 		return listAttente;
 	}
 
-	public void setListUUID(List<Integer> listUUID) {
-		this.listUUID = listUUID;
+	public void setListUUID(Integer UUID) 
+	{
+		this.listUUID.add(UUID);
 	}
 
-	public List<Integer> getListUUID() {
+	public List<Integer> getListUUID() 
+	{
 		return listUUID;
 	}
 
-	public void setListCarteDistrib(List<String> listCarteDistrib) {
+	public void setListCarteDistrib(List<String> listCarteDistrib) 
+	{
 		this.listCarteDistrib = listCarteDistrib;
 	}
 
-	public List<String> getListCarteDistrib() {
+	public List<String> getListCarteDistrib() 
+	{
 		return listCarteDistrib;
 	}
 }
