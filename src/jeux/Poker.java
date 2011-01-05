@@ -80,7 +80,13 @@ public class Poker {
 	
 	
 	public void gestionConnexion() {
-		Connexion connect = new ConnexionDealer();
+		Connexion connect;
+		if(Global.dealer == true){
+			connect = new ConnexionDealer();
+		}else {
+			connect = new ConnexionJoueur();
+		}
+		
 		try 
 		{
 			inter = connect.Connexion();

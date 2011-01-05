@@ -31,7 +31,7 @@ public class JPseudo extends JFrame implements ActionListener {
 	
 	// Label où l'utilisateur rentre l'adresse IP du serveur
 	private JLabel infoIP = new JLabel("Adresse IP du serveur : ");
-	private JTextField ip = new JTextField("255.255.255.255");
+	private JTextField ip = new JTextField("192.168.1.32");
 	
 	// Choisit si on est le dealer ou pas
 	private JCheckBox dealer = new JCheckBox("Suis-je le dealer(Cochez pour oui) :", false);
