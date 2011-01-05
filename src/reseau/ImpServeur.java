@@ -279,7 +279,7 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 		
 		Joueur[] listJoueur = table.getListJoueur();
 		Joueur joueur;
-		
+		System.out.println("Lancement de la partie.");
 		while(i<10 && !grosseBlinde)
 		{
 			joueur =  listJoueur[i];
@@ -294,7 +294,7 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 					{
 						System.out.println("Ce joueur lance la grosse blinde");
 						this.poserGrosseBlinde(joueur);
-						chercheJoueurSuivant(joueur,"jouer");
+						chercheJoueurSuivant(joueur,"attente");
 						grosseBlinde = true;
 					}
 			i++;
