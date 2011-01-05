@@ -92,7 +92,7 @@ public class Poker {
 		Global.interC = new ImpClient();
 		
 		try {
-			Object[] infosPJ = {Global.pseudo, 1500, InetAddress.getLocalHost(), Global.interC};
+			Object[] infosPJ = {Global.pseudo, 1500, InetAddress.getLocalHost()};
 			
 			Global.uuid = inter.envoiInformationsJoueur(infosPJ);
 		} catch (UnknownHostException e) {

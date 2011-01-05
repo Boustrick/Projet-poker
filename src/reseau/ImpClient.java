@@ -182,6 +182,7 @@ public class ImpClient implements InterfaceClient, Serializable {
 		//int position = (Integer) obj[6];
 		jtable.ajoutCartesJoueur(3, carte1, carte2);
 		
+		System.out.println("passe donner carte");
 	}
 
 }
