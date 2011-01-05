@@ -87,7 +87,7 @@ public class Joueur
 	
 	public String getStatut()
 	{
-		return statut;
+		return this.statut;
 	}
 	
 	/**

@@ -30,16 +30,16 @@ public class Table
 		this.petiteBlinde = petiteBlinde;
 		
 		listJoueur = new Joueur[10];
+		listAttente = new Joueur[10];
+		
 		for (int i = 0;i<10;i++)
 		{
 			listJoueur[i] = new Joueur(); 
 		}
 		
-		listAttente = new Joueur[10];
-		
 		for (int i = 0 ; i<10 ; i++)
 		{
-			listJoueur[i] = new Joueur(); 
+			listAttente[i] = new Joueur(); 
 		}
 		
 		listCarteTable = new LinkedList<String>();
@@ -205,15 +205,14 @@ public class Table
 	public void setAttente(Joueur joueur)
 	{
 		int i = 0;
-		boolean placer = false;
 		
-		while(i<9 && !placer)
+		for(Joueur j : listAttente)
 		{
-			Joueur j = listJoueur[i];
 			if (!j.isPresent()) 
 			{
 				listJoueur[i] = joueur;
 				joueur.setPositionTable(i);
+				break;
 			}
 			i++;
 		}
