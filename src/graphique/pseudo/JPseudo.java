@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -30,7 +31,10 @@ public class JPseudo extends JFrame implements ActionListener {
 	
 	// Label où l'utilisateur rentre l'adresse IP du serveur
 	private JLabel infoIP = new JLabel("Adresse IP du serveur : ");
-	private JTextField ip = new JTextField("128.0.0.1");
+	private JTextField ip = new JTextField("255.255.255.255");
+	
+	// Choisit si on est le dealer ou pas
+	private JCheckBox dealer = new JCheckBox("Suis-je le dealer(Cochez pour oui) :", false);
 	
 	// Bouton de validation du pseudo
 	private JButton btn_valider = new JButton("Valider");
@@ -67,12 +71,15 @@ public class JPseudo extends JFrame implements ActionListener {
 		layout.addLayoutComponent(ip, constraints);
 		constraints.gridx = 2;
 		constraints.gridy = 2;
+		layout.addLayoutComponent(dealer, constraints);
 		constraints.gridwidth = 2;
+		constraints.gridy = 3;
 		layout.addLayoutComponent(btn_valider, constraints);
 		this.add(info);
 		this.add(pseudo);
 		this.add(infoIP);
 		this.add(ip);
+		this.add(dealer);
 		this.add(btn_valider);
 		btn_valider.addActionListener(this);
 	}
@@ -89,6 +96,7 @@ public class JPseudo extends JFrame implements ActionListener {
 		if ((!pseudo.equalsIgnoreCase(texte))&&(!pseudo.equalsIgnoreCase(""))) {
 			this.setVisible(false);
 			Global.ip = ip.getText();
+			Global.dealer = dealer.isSelected();
 			poker.lancementPartie(pseudo);
 		}
 	}
