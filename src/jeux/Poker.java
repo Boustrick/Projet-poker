@@ -56,7 +56,7 @@ public class Poker {
 		JFrame frame = new JFrame("Poker - " + pseudo);
 		frame.setResizable(false);
 		JTable table = Global.getJTable(); // créée dans la classe Global
-		PanelBoutons boutons = new PanelBoutons();
+		PanelBoutons boutons = Global.getPanelBoutons();
 		@SuppressWarnings("unused")
 		ActionsBoutons AcBtn = new ActionsBoutons(boutons);
 		frame.setBounds(5, 5, 1270, 750);

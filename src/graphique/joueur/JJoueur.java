@@ -12,8 +12,6 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import reseau.Global;
-
 /**
  * Gère l'affichage d'un joueur
  *@author Fabien
@@ -195,9 +193,8 @@ public class JJoueur extends JPanel {
 		this.add(carte1);
 		this.add(carte2);
 		
-		Global.getJTable().repaint();
-		//this.updateUI();
-		Global.getJTable().validate();
+		this.repaint();
+		this.updateUI();
 	}
 	
 	/**
@@ -235,9 +232,16 @@ public class JJoueur extends JPanel {
 	 * @param mise Mise du joueur
 	 */
 	public void miser (int mise) {
-		banque -= mise;
-		jvalBanque.setText(String.valueOf(banque));
 		jvalMise.setText(String.valueOf(mise));
+	}
+	
+	/**
+	 * Banque du joueur
+	 * @param banque Banque du joueur
+	 */
+	public void setBanque (int banque) {
+		this.banque = banque;
+		jvalBanque.setText(String.valueOf(banque));
 	}
 	
 	/**
