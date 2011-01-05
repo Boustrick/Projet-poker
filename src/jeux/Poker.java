@@ -53,6 +53,7 @@ public class Poker {
 		frame.setResizable(false);
 		JTable table = Global.getJTable(); // créée dans la classe Global
 		PanelBoutons boutons = new PanelBoutons();
+		@SuppressWarnings("unused")
 		ActionsBoutons AcBtn = new ActionsBoutons(boutons);
 		frame.setBounds(5, 5, 1270, 750);
 		GridBagLayout layout = new GridBagLayout();

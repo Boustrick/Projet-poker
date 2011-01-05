@@ -4,6 +4,7 @@ import graphique.carte.Carte;
 import graphique.carte.JCarte;
 import graphique.table.JVide;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -39,10 +40,10 @@ public class JJoueur extends JPanel {
 	private JLabel jmise = new JLabel("Mise : ");
 	
 	// Valeur de la mise
-	private JLabel jvalMise = new JLabel();
+	private JLabel jvalMise = new JLabel(" ");
 	
 	// Type du joueur, dealer, petite blende, grande blende
-	private JLabel jtype = new JLabel();
+	private JLabel jtype = new JLabel(" ");
 	
 	// Cartes du joueur
 	private JPanel carte1;
@@ -69,10 +70,13 @@ public class JJoueur extends JPanel {
 		this.hauteur = hauteur;
 		carte1 = new JVide(largeur/2, hauteur/2);
 		carte2 = new JVide(largeur/2, hauteur/2);
-		layout = new GridBagLayout();
-		constraints = new GridBagConstraints();
 		this.type = type;
-		this.setLayout(layout);
+		jnom.setForeground(Color.red);
+		jbanque.setForeground(Color.red);
+		jvalBanque.setForeground(Color.red);
+		jmise.setForeground(Color.red);
+		jvalMise.setForeground(Color.red);
+		jtype.setForeground(Color.red);
 		
 		// Initialisation du layout
 		this.initLayout(this.type);
@@ -81,6 +85,7 @@ public class JJoueur extends JPanel {
 		this.setPreferredSize(new Dimension(largeur, hauteur));
 		
 		// Affichage du JPanel
+		this.setOpaque(false);
 		this.setVisible(true);
 	}
 	
@@ -89,6 +94,11 @@ public class JJoueur extends JPanel {
 	 * @param type Type du joueur s'il est en haut, ou en bas, ou a gauche ou a droite
 	 */
 	private void initLayout (int type) {
+		this.removeAll();
+		this.doLayout();
+		layout = new GridBagLayout();
+		constraints = new GridBagConstraints();
+		this.setLayout(layout);
 		constraints.gridwidth = 3;
 		switch (type) {
 			case 0 : constraints.gridheight = 1;
@@ -111,13 +121,13 @@ public class JJoueur extends JPanel {
 				constraints.gridx = 0;
 				layout.addLayoutComponent(carte1, constraints);
 				break;
-			case 1 : constraints.gridwidth = 3;
+			case 1 : constraints.gridheight = 3;
 				constraints.gridx = 0;
 				constraints.gridy = 0;
 				layout.addLayoutComponent(carte1, constraints);
 				constraints.gridy = 3;
 				layout.addLayoutComponent(carte2, constraints);
-				constraints.gridwidth = 1;
+				constraints.gridheight = 1;
 				constraints.gridx = 3;
 				constraints.gridy = 0;
 				layout.addLayoutComponent(jnom, constraints);
@@ -152,13 +162,13 @@ public class JJoueur extends JPanel {
 				constraints.gridx = 0;
 				layout.addLayoutComponent(jmise, constraints);
 				break;
-			case 3 : constraints.gridwidth = 3;
+			case 3 : constraints.gridheight = 3;
 				constraints.gridx = 3;
 				constraints.gridy = 0;
 				layout.addLayoutComponent(carte1, constraints);
 				constraints.gridy = 3;
 				layout.addLayoutComponent(carte2, constraints);
-				constraints.gridwidth = 1;
+				constraints.gridheight = 1;
 				constraints.gridx = 0;
 				constraints.gridy = 0;
 				layout.addLayoutComponent(jnom, constraints);
@@ -182,14 +192,19 @@ public class JJoueur extends JPanel {
 		this.add(jtype);
 		this.add(carte1);
 		this.add(carte2);
+		
+		this.repaint();
+		this.updateUI();
 	}
 	
 	/**
 	 * Retourne les cartes du joueur
 	 */
 	public void retournerCartes () {
-		((JCarte)carte1).retournerCarte();
-		((JCarte)carte2).retournerCarte();
+		if (!(carte1 instanceof JVide)) {
+			((JCarte)carte1).retournerCarte();
+			((JCarte)carte2).retournerCarte();
+		}
 	}
 	
 	/**
@@ -200,6 +215,7 @@ public class JJoueur extends JPanel {
 	public void ajouterCartes (Carte c1, Carte c2) {
 		carte1 = new JCarte(c1, largeur/2, hauteur/2);
 		carte2 = new JCarte(c2, largeur/2, hauteur/2);
+		this.initLayout(type);
 	}
 	
 	/**
@@ -208,6 +224,7 @@ public class JJoueur extends JPanel {
 	public void effacerCartes () {
 		carte1 = new JVide(largeur/2, hauteur/2);
 		carte2 = new JVide(largeur/2, hauteur/2);
+		this.initLayout(type);
 	}
 	
 	/**

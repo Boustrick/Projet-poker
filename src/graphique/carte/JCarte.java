@@ -1,7 +1,7 @@
 package graphique.carte;
 
-import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +10,6 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.LineBorder;
 
 /**
  * Gère l'affichage d'une carte, arrive en face cacher
@@ -43,11 +42,8 @@ public class JCarte extends JPanel {
 		
 		this.afficherCarte();
 
-		this.setSize(largeur, hauteur);
-		this.setMaximumSize(new Dimension(largeur, hauteur));
 		this.setPreferredSize(new Dimension(largeur, hauteur));
-		this.add(lbl_carte);
-		this.setBorder(new LineBorder(Color.blue));
+		this.setOpaque(false);
 		this.setVisible(true);
 	}
 	
@@ -55,6 +51,8 @@ public class JCarte extends JPanel {
 	 * @param affiche la carte
 	 */
 	private void afficherCarte () {
+		this.removeAll();
+		this.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		String nomCarte = new String();
 		if(faceCacher) 
 			nomCarte="dos.jpg";
@@ -63,9 +61,8 @@ public class JCarte extends JPanel {
 		
         try {
 			Image img = ImageIO.read(new File("Images/Cartes/"+nomCarte));
-			img.getScaledInstance(hauteur , largeur, Image.SCALE_DEFAULT);
 			lbl_carte = new JLabel(new ImageIcon(img.getScaledInstance(hauteur , largeur, Image.SCALE_DEFAULT)));
-			lbl_carte.setSize(largeur, hauteur);
+			this.add(lbl_carte);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

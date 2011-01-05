@@ -11,8 +11,6 @@ import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Toolkit;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.util.HashMap;
 
 import javax.swing.JPanel;
@@ -23,12 +21,12 @@ import javax.swing.JPanel;
  *@version 0.1
  **/
 @SuppressWarnings("serial")
-public class JTable extends JPanel implements ComponentListener {
+public class JTable extends JPanel {
 	// Taille d'une case du GridBagLayout
 	private static final int TAILLE = 35;
 	
 	// Taille d'une carte au milieu de la table
-	private static final int carte_lg = TAILLE;
+	private static final int carte_lg = TAILLE*2;
 	private static final int carte_ht = TAILLE*2;
 	
 	// Taille d'un joueur
@@ -69,17 +67,13 @@ public class JTable extends JPanel implements ComponentListener {
 			}
 		}
 		
-		// Initialisation du layout
-		this.initLayout();
-		this.setLayout(layout);
-		
 		// Récupération de l'image de la table pour le fond
 		table = Toolkit.getDefaultToolkit().getImage("Images/poker1.png");
+		resized =  table.getScaledInstance(1000, 500, Image.SCALE_DEFAULT);
 		
 		// Affichage des cartes et des joueurs
 		this.formerTable();
 		
-		this.addComponentListener(this);
 		this.setPreferredSize(new Dimension(1000, 500));
 		this.setVisible(true);
 	}
@@ -101,20 +95,15 @@ public class JTable extends JPanel implements ComponentListener {
 		constraints.insets = new Insets(10, 10, 10, 10);
 		constraints.weightx = 1;
 		constraints.weighty = 1;
-	}
-	
-	/**
-	 * Lorsque la taille de la fenètre change, 
-	 * on doit changer la taille de l'image de fond
-	 */
-	private void resize () {
-		resized =  table.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_FAST);
+		this.setLayout(layout);
 	}
 	
 	/**
 	 * Affichage de la table, avec les différents joueurs et cartes
 	 */
 	private void formerTable () {
+		this.removeAll();
+		this.initLayout();
 		// Ajout de l'affichage du pot de la table
 		constraints.gridx  = 5;
 		constraints.gridwidth = 5;
@@ -136,6 +125,10 @@ public class JTable extends JPanel implements ComponentListener {
 			c = cartes.get(i);
 			this.affCarte(c, i);
 		}
+		
+		this.repaint();
+		this.updateUI();
+		this.validate();
 	}
 	
 	/**
@@ -217,7 +210,7 @@ public class JTable extends JPanel implements ComponentListener {
 	 * @param position Position de la carte a afficher
 	 */
 	private void affCarte (JPanel panel, int position) {
-		constraints.gridwidth = 1;
+		constraints.gridwidth = 2;
 		constraints.gridheight = 2;
 		// On regarde quelle carte doit etre ajoutee
 		switch (position) {
@@ -319,6 +312,8 @@ public class JTable extends JPanel implements ComponentListener {
 				((JJoueur)joueurs.get(position)).retournerCartes();
 			}
 		}
+		this.repaint();
+		this.updateUI();
 	}
 	
 	/**
@@ -437,27 +432,5 @@ public class JTable extends JPanel implements ComponentListener {
 	 */
 	public void setDealer (int position) {
 		((JJoueur)joueurs.get(position)).setDealer();
-	}
-	
-	
-	/***************** Zone des fonctions du listener  *****************/
-	@Override
-	public void componentHidden(ComponentEvent e) {
-		// Rien à faire
-	}
-
-	@Override
-	public void componentMoved(ComponentEvent e) {
-		// Rien à faire
-	}
-
-	@Override
-	public void componentResized(ComponentEvent e) {
-		this.resize();
-	}
-
-	@Override
-	public void componentShown(ComponentEvent e) {
-		// Rien à faire
 	}
 }
