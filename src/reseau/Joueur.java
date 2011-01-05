@@ -16,8 +16,6 @@ public class Joueur
 	
 	private List<String> carte;
 	
-
-	
 	private int derniereMise;
 	private int positionTable;
 	private int solde;

@@ -1,4 +1,5 @@
 package reseau;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -43,20 +44,7 @@ public interface InterfaceServeur extends Remote
      */
     void faireTapis(long uuid) throws RemoteException;
     
-    /*
-     * recupererMesPetitesBlind appel�e pour demander au dealer de r�cup�rer
-     * les petites blindes et d�cr�menter son solde
-     * @param UUID du joueur
-     * @throws RemoteException
-     */
-    public void recupererMesPetitesBlind(long uuid) throws RemoteException;
     
-    /*
-     * recupererMesGrossesBlind appel�e pour demander au dealer de r�cup�rer
-     * les grosses blindes et d�cr�menter son solde
-     * @param UUID du joueur
-     * @throws RemoteException
-     */
-    public void recupererMesGrossesBlind(long uuid) throws RemoteException;
+    boolean quitter(long uuid) throws RemoteException;
 
 }
