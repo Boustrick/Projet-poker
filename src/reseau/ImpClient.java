@@ -120,6 +120,8 @@ public class ImpClient implements InterfaceClient, Serializable {
 		
 		int le_pot = (int) pot;
 		Global.getJTable().ajouterPot(le_pot);
+		
+		System.out.println("passe mise à jour de la table");
 	}
 
 	 /**

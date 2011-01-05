@@ -14,7 +14,7 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
-import calcul.calculMain;
+import calcul.CalculMain;
 
 
 import java.net.InetAddress;
@@ -26,6 +26,7 @@ import javax.swing.JFrame;
 
 import reseau.Connexion;
 
+import reseau.ConnexionJoueur;
 import reseau.Global;
 import reseau.ImpClient;
 import reseau.InterfaceServeur;
@@ -87,7 +88,7 @@ public class Poker {
 	
 	
 	public void gestionConnexion() {
-		Connexion connect = new Connexion();
+		Connexion connect = new ConnexionJoueur();
 		try 
 		{
 			inter = connect.Connexion();
