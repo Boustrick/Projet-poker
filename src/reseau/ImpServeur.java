@@ -43,7 +43,6 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 		
 		System.out.println("Récuperation réussit !!!");
 		
-		
 		int lower = 0;
 		int higher = 1000;
 
@@ -315,7 +314,6 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 				String carte1 = table.getNewCarte();
 				String carte2 = table.getNewCarte();
 				j.setCarte(carte1, carte2);	
-				
 				try 
 				{
 					interC.donnerCarte(j.getCarte());
@@ -467,9 +465,9 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 			
 			for (Joueur j : listAttente)
 			{
-				if(j.isPresent())
+				if(j!=null )
 				{
-					j.getInterfaceClient().miseAJourTable(actionATransmettre, table.getPot());
+					if (j.isPresent()) j.getInterfaceClient().miseAJourTable(actionATransmettre, table.getPot());
 				}
 			}
 		} catch (RemoteException e) 
