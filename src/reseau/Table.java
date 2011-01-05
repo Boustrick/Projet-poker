@@ -1,6 +1,7 @@
 package reseau;
 
 import java.util.LinkedList;
+import java.util.List;
 
 
 public class Table 
@@ -9,7 +10,6 @@ public class Table
 	private Joueur[] listAttente;
 	
 	private LinkedList<String> listCarteTable;
-	private LinkedList<String> listCarte;
 	
 	private int pot;
 	private int petiteBlinde;
@@ -18,6 +18,9 @@ public class Table
 	
 	private boolean petiteB;
 	private boolean grosseB;
+	
+	private List<Integer> listUUID;
+	private List<String> listCarteDistrib;
 	
 	
 	public Table(int petiteBlinde)
@@ -39,21 +42,15 @@ public class Table
 			listJoueur[i] = new Joueur(); 
 		}
 		
-		listCarte = new LinkedList<String>();
 		listCarteTable = new LinkedList<String>();
+		setListUUID(new LinkedList<Integer>());
+		setListCarteDistrib(new LinkedList<String>());
 		
 		setPetiteB(false);
 		setGrosseB(false);
 		
 		setDerniereMise(0);
 		
-		for(int i=1;i<5;i++)
-		{
-			for(int j=1;j<14;j++)
-			{
-				listCarte.add(j+"_"+i);
-			}
-		}
 	}
 	
 	/**
@@ -150,17 +147,33 @@ public class Table
 	
 	public String getNewCarte()
 	{
-		int couleurLower = 1;
-		int couleurHigher = 4;
-
-		int couleur = (int)(Math.random() * (couleurHigher-couleurLower)) + couleurLower;
+		boolean nouvelleCarte = false;
 		
-		int valeurLower = 1;
-		int valeurHigher = 13;
-
-		int valeur = (int)(Math.random() * (valeurHigher-valeurLower)) + valeurLower;
+		int couleurLower;
+		int couleurHigher;
+		int couleur = 0;
 		
-		System.out.println("Random Carte: "+valeur+"_"+couleur);
+		int valeurLower;
+		int valeurHigher;
+		int valeur = 0;
+		
+		while(!nouvelleCarte)
+		{
+			couleurLower = 1;
+			couleurHigher = 4;
+
+			couleur = (int)(Math.random() * (couleurHigher-couleurLower)) + couleurLower;
+		
+			valeurLower = 1;
+			valeurHigher = 13;
+
+			valeur = (int)(Math.random() * (valeurHigher-valeurLower)) + valeurLower;
+		
+			System.out.println("Random Carte: "+valeur+"_"+couleur);
+			
+			if(!this.listCarteDistrib.contains(valeur+"_"+couleur)) nouvelleCarte = true;
+		}
+		
 		return (valeur+"_"+couleur);
 	}
 	
@@ -200,8 +213,9 @@ public class Table
 			if (!j.isPresent()) 
 			{
 				listJoueur[i] = joueur;
-				joueur.setPositionTable(i+1);
+				joueur.setPositionTable(i);
 			}
+			i++;
 		}
 	}
 
@@ -226,30 +240,25 @@ public class Table
 	}
 	
 	/**
-	 * Retourne le prochain joueur qui doit jouer
-	 * @param UID
-	 * @return Joueur
+	 * Permet d'enlever un joueur de la liste des joueurs
+	 * @param uuid
 	 */
 	
-	public Joueur getJoueurSuivant(int UID)
+	public void enleverJoueur(long uuid)
 	{
-		boolean trouver = false;
-		int i=0;
+		int i = 0;
 		Joueur joueur;
 		
-		while(i<listJoueur.length && !trouver)
+		while(i<10)
 		{
 			joueur = listJoueur[i];
-			
-			if (joueur.isPresent())
+			if (joueur.getUID().equals(uuid))
 			{
-				if(joueur.getUID()==UID) trouver = true;
+				listJoueur[i] = new Joueur();
+				nbJoueur--;
 			}
-			
 			i++;
-		} 
-		if (i == listJoueur.length) return listJoueur[0];
-		else return listJoueur[i-1];
+		}
 	}
 
 	public void setListCarteTable(String carte) 
@@ -289,5 +298,21 @@ public class Table
 	public Joueur[] getListAttente()
 	{
 		return listAttente;
+	}
+
+	public void setListUUID(List<Integer> listUUID) {
+		this.listUUID = listUUID;
+	}
+
+	public List<Integer> getListUUID() {
+		return listUUID;
+	}
+
+	public void setListCarteDistrib(List<String> listCarteDistrib) {
+		this.listCarteDistrib = listCarteDistrib;
+	}
+
+	public List<String> getListCarteDistrib() {
+		return listCarteDistrib;
 	}
 }

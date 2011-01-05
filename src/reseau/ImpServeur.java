@@ -2,6 +2,7 @@ package reseau;
 
 import java.net.InetAddress;
 import java.net.MalformedURLException;
+import java.net.UnknownHostException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -55,10 +56,18 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 		InterfaceClient interfaceJoueur = null;
 		try 
 		{
-			interfaceJoueur=(InterfaceClient)Naming.lookup("rmi://"+ip+"/poker");
+			if (ip.equals(InetAddress.getLocalHost()))
+			{
+				interfaceJoueur = (InterfaceClient)obj[3];
+			}
+			else
+			{
+				interfaceJoueur=(InterfaceClient)Naming.lookup("rmi://"+ip+"/poker");
+			}
 		} catch (RemoteException e) {e.printStackTrace();
 		} catch (NotBoundException e) {e.printStackTrace();
-		} catch (MalformedURLException e) {e.printStackTrace();}
+		} catch (MalformedURLException e) {e.printStackTrace();
+		} catch (UnknownHostException e) {e.printStackTrace();}
 		
 		switch (table.getNbJoueur())
 		{
@@ -98,7 +107,7 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 		
 		System.out.println("Placement du joueur fini");
 		
-		if (table.getNbJoueur()>1) this.startGame();
+		if (table.getNbJoueur()==2) this.startGame();
 		this.transmettreNouveauJoueur(UID);
 		
 		return UID;
@@ -349,7 +358,7 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 				j.setCarte(carte1, carte2);	
 				try 
 				{
-					interC.donnerCarte(j.getCarte());
+					interC.donnerCarte(carte1,carte2);
 				} catch (RemoteException e) {e.printStackTrace();}
 			}
 		}
@@ -396,30 +405,67 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 	
 	private void chercheJoueurSuivant(Joueur joueur,String statut)
 	{
-		boolean trouver = false;
-		while(trouver!=true)
+		Joueur[] listJoueur = table.getListJoueur();
+		Joueur j;
+		int i = 0;
+		
+		/** Cherche la position du joueur **/
+		while(true)
 		{
-			joueur = table.getJoueurSuivant(joueur.getUID());
-				
-			if (joueur.getStatut()=="attente") 
+			j = listJoueur[i];
+			if(j.isPresent() && j.equals(joueur))
 			{
-				joueur.setStatut(statut);
-				trouver = true;
+				j.setStatut(statut);
+				break;
 			}
+			i++;
+		}
+		
+		/** Cherche le prochain joueur à jouer **/
+		i++;
+		Joueur joueurSuivant = null;
+		
+		while(i<10)
+		{
+			joueurSuivant = listJoueur[i];
 				
-			if (joueur.isDealer() && joueur.getStatut() == "coucher")
+			if (joueurSuivant.isPresent() && joueurSuivant.getStatut().equals("attente")) 
 			{
-				
-				if(this.nouveauTour())
-				{
-					joueur = table.getJoueurSuivant(joueur.getUID());
-					joueur.setStatut(statut);
-				}
-				
-				trouver = true;
+				joueur.setStatut("jouer");
+				break;
 			}
+			i++;
+		}
+		
+		if (i==10 && this.nouveauTour())
+		{
+			joueurSuivant = this.getPremierJoueur();
+			joueurSuivant.setStatut("jouer");
 		}
 	}
+	
+	/**
+	 * Retourne le premier joueur qui a la possibilité de jouer
+	 * @return
+	 */
+	
+	private Joueur getPremierJoueur()
+	{
+		Joueur[] listJoueur = table.getListJoueur();
+		Joueur premierJoueur = null;
+		
+		for(Joueur j : listJoueur)
+		{
+			if(j.isPresent() && j.getStatut().equals("attente"))
+			{
+				premierJoueur = j;
+				break;
+			}
+		}
+		return premierJoueur;
+	}
+	
+	
 	/**
      * demanderListeJoueur sera appelée à chaque changement effectué sur la
      * liste des joueurs.

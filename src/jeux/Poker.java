@@ -80,7 +80,7 @@ public class Poker {
 	
 	
 	public void gestionConnexion() {
-		Connexion connect = new ConnexionJoueur();
+		Connexion connect = new ConnexionDealer();
 		try 
 		{
 			inter = connect.Connexion();
