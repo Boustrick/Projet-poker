@@ -47,10 +47,8 @@ public class ImpClient implements InterfaceClient, Serializable {
      * Met à jour les informations du joueur
      * @param  
      * 
-     * - une liste de tableaux d'object de 7colonnes :
-     *                  cartesDuJoueur  (String) // Intialement à "Masquées" et
-     *                                              après Abattage
-     *                                              "valeur_couleur-valeur_couleur".
+     * - une liste de tableaux d'object de 6 colonnes :
+     *                  
      *                  adresseIP		(String)
      *                  uuid			(long)
      *                  pseudo          (String)
@@ -105,25 +103,23 @@ public class ImpClient implements InterfaceClient, Serializable {
 //			Carte carte2 = new Carte(convertToInt.get(3), convertToInt.get(2));
 //			
 			JTable jtable = Global.getJTable();
-//			
+			int solde = (Integer) obj[3];
 			int position = (Integer) obj[6];
+			jtable.ajoutJoueur((String) obj[2], solde, position);
 			//jtable.ajoutCartesJoueur(position, carte1, carte2);
 			//ajouter les autres mise à jour
 			
-			int solde = (Integer) obj[3];
-			
-			
+						
 			int mise  = (Integer) obj[4];
 			jtable.miser(position, mise);
 			
 			String statut = (String) obj[5];
 			
 			
-			int le_pot = (int) pot;
-			jtable.ajouterPot(le_pot);
-			
-			
 		}
+		
+		int le_pot = (int) pot;
+		Global.getJTable().ajouterPot(le_pot);
 	}
 
 	 /**
@@ -162,7 +158,29 @@ public class ImpClient implements InterfaceClient, Serializable {
      *                   carte.add(valeur+"_"+id);
      * @throws RemoteException
      */
-	public void donnerCarte(List<String> carte) {
+	public void donnerCarte(List<String> carte) {	
+		
+		List<String> splitCartes = new ArrayList<String>();
+		for(String cart : carte){
+			StringTokenizer stt = new StringTokenizer(cart, "_");
+			while ( stt.hasMoreTokens() ) {
+				splitCartes.add(stt.nextToken());
+			}
+		}
+		// On a une liste de string avec les valeurs dans l'ordre
+		
+		List<Integer> convertToInt = new ArrayList<Integer>();
+		for(String spli : splitCartes){
+			convertToInt.add(Integer.parseInt(spli));
+		}
+		
+		Carte carte1 = new Carte(convertToInt.get(1), convertToInt.get(0));
+		Carte carte2 = new Carte(convertToInt.get(3), convertToInt.get(2));
+		
+		JTable jtable = Global.getJTable();
+		
+		//int position = (Integer) obj[6];
+		jtable.ajoutCartesJoueur(3, carte1, carte2);
 		
 	}
 
