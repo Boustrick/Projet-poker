@@ -4,8 +4,11 @@
 package calcul;
 
 import graphique.carte.Carte;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.StringTokenizer;
+import reseau.Joueur;
 
 
 /**
@@ -282,7 +285,69 @@ public class calculMain {
 		return t;
 	}
 	
+
+	private static List<Carte> stringToCarte(List<String> listCarte){
+		List<String> splitCartes = new ArrayList<String>();
+		for(String cart : listCarte){
+			StringTokenizer stt = new StringTokenizer(cart, "_");
+			while ( stt.hasMoreTokens() ) {
+				splitCartes.add(stt.nextToken());
+			}
+		}
+		// On a une liste de string avec les valeurs dans l'ordre
+		List<Integer> convertToInt = new ArrayList<Integer>();
+		for(String spli : splitCartes){
+			convertToInt.add(Integer.parseInt(spli));
+		}
+		List<Carte> listeCarte = new ArrayList<Carte>();
+		for(int i=0;i<convertToInt.size();i=i+2) {
+			listeCarte.add(new Carte(convertToInt.get(i+1),convertToInt.get(i)));
+		}	
+		return listeCarte;	
+	}
 	
+	
+	/**************************************************************
+	 * Fonction qui détermine le vainqueur
+	 * @param joueurListe
+	 * @param carteListe
+	 * @return joueurListe
+	 **************************************************************/
+	public static List<Joueur> determineVainqueur(List<Joueur> joueurListe,List<String> carteListe){
+		List<Joueur> gagnants =  new ArrayList<Joueur>();
+		List<Carte> listeCarte = new ArrayList<Carte>();
+		int i=0;
+		int[] resMax= new int[2];
+		int[] t= new int[2];
+		while(gagnants.isEmpty()) {
+			for(Joueur joueur: joueurListe){
+				listeCarte.clear();
+				listeCarte.addAll(stringToCarte(joueur.getCarte()));
+				listeCarte.addAll(stringToCarte(carteListe));
+				t=calculDeLaMain(listeCarte, i);
+				if(t[0]!=-1) {
+//Si il y a deja un joueur mais que la main du nouveau de joueur est meilleur
+					if(!gagnants.isEmpty() && t[0]>resMax[0] ||
+						i==3 && !gagnants.isEmpty() && t[0]==resMax[0] && t[1]>resMax[1] ||
+							i==7 && !gagnants.isEmpty() && t[0]==resMax[0] && t[1]>resMax[1]){
+						gagnants.remove(0);
+						gagnants.add(joueur);
+						resMax=t;
+					}
+//Si il y a deja un joueur mais que la main du nouveau de joueur est égale ou que c'est égal
+					else if(!gagnants.isEmpty() && t[0]==resMax[0] ||
+						i==3 && !gagnants.isEmpty() && t[0]==resMax[0] && t[1]==resMax[1] ||
+							i==7 && !gagnants.isEmpty() && t[0]==resMax[0] && t[1]==resMax[1] ||
+							gagnants.isEmpty()){
+						gagnants.add(joueur);
+					}
+				}
+			}
+			i++;
+		}
+		return gagnants;	
+	}
+
 	
 	
 	

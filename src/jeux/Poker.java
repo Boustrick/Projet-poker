@@ -2,11 +2,21 @@ package jeux;
 
 import graphique.boutons.ActionsBoutons;
 import graphique.boutons.PanelBoutons;
+import graphique.carte.Carte;
 import graphique.pseudo.JPseudo;
 import graphique.table.JTable;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JFrame;
+
+import calcul.calculMain;
+
+
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
@@ -15,6 +25,7 @@ import java.rmi.RemoteException;
 import javax.swing.JFrame;
 
 import reseau.Connexion;
+
 import reseau.Global;
 import reseau.ImpClient;
 import reseau.InterfaceServeur;
