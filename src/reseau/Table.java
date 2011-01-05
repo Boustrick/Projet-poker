@@ -80,8 +80,10 @@ public class Table
 				if (!joueur.isPresent()) 
 				{
 					listJoueur[i] = newJoueur;
-					newJoueur.setPositionTable(i+1);
+					newJoueur.setPositionTable(i);
+					placer = true;
 				}
+				i++;
 			}
 		}
 		nbJoueur++;

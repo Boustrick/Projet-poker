@@ -1,6 +1,9 @@
 package reseau;
 
 import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.LinkedList;
@@ -38,8 +41,6 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 		int solde = (Integer)obj[1];
 		System.out.println("Récuperation adresse.");
 		InetAddress ip = (InetAddress)obj[2];
-		System.out.println("Récuperation interface.");
-		InterfaceClient interfaceJoueur = (InterfaceClient)obj[3];
 		
 		System.out.println("Récuperation réussit !!!");
 		
@@ -50,8 +51,18 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 		
 		System.out.println("UUID initialisé.");
 		
+		/** Se connecte à l'interface du joueur **/
+		InterfaceClient interfaceJoueur = null;
+		try 
+		{
+			interfaceJoueur=(InterfaceClient)Naming.lookup("rmi://"+ip+"/poker");
+		} catch (RemoteException e) {e.printStackTrace();
+		} catch (NotBoundException e) {e.printStackTrace();
+		} catch (MalformedURLException e) {e.printStackTrace();}
+		
 		switch (table.getNbJoueur())
 		{
+		
 			/** Aucun joueur dans la partie **/
 			case(0):
 			{
@@ -71,27 +82,29 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 			{
 				if (partieCommencer) 
 				{
+					System.out.println("Attente de placement sur la liste d'attente.");
 					table.setAttente(new Joueur(UID,pseudo,"spectateur",false,0,solde,ip,interfaceJoueur));
 					System.out.println("Un nouveau joueur a été ajouter dans la file d'attente.\nSont UID est "+UID);
 				}
 				else 
 				{
+					System.out.println("Attente de placement sur table");
 					table.setJoueur(new Joueur(UID,pseudo,"attente",false,0,solde,ip,interfaceJoueur));
 					System.out.println("Un nouveau joueur a été ajouter a la partie.\nSont UID est "+UID);
 				}
 			}
+			break;
 		}
 		
+		System.out.println("Placement du joueur fini");
+		
 		if (table.getNbJoueur()>1) this.startGame();
-		this.transmettreAction();
+		this.transmettreNouveauJoueur(UID);
 		
 		return UID;
 	}
 	
     
-    
-    
-	
     /*
      * relancer appelée par les joueurs se tenant après la grosse blinde
      * @param UUID du joueur
@@ -99,8 +112,8 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
      * @return le solde actuel du joueur (convertis en jeton chez le client)
      * @throws RemoteException
      */
-    
-    public void relancer(long uuid, long somme)
+
+	public void relancer(long uuid, long somme)
 	{
 		Joueur joueur = table.getJoueur(uuid);
 		
@@ -238,9 +251,36 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 		partieCommencer = true;
 		nbTour = 1;
 			
+		
+		int i=0;
+		boolean fin = false;
+		boolean petiteBlinde = false;
+		boolean grosseBlinde = false;
+		
 		Joueur[] listJoueur = table.getListJoueur();
-		Joueur joueur = listJoueur[0];
-		joueur.setStatut("petiteBlinde");
+		Joueur joueur = null;
+		
+		while(i<10 && !fin)
+		{
+			joueur = listJoueur[i];
+			System.out.println("Joueur "+i+" present :"+joueur.isPresent());
+			if (joueur.isPresent() && !petiteBlinde)
+			{
+				this.poserPetiteBlinde(joueur);
+				petiteBlinde = true;
+			}
+			else 	if (joueur.isPresent() && !grosseBlinde)
+					{
+						this.poserGrosseBlinde(joueur);
+						if (joueur.isDealer()) this.nouveauTour();
+						grosseBlinde = true;
+					}
+
+			i++;
+		}
+		System.out.println("Fin des poses de la petite et grosse blinde");
+		this.donnerCartes();
+		
 	}
 	
 	 /**
@@ -251,9 +291,8 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
      * @throws RemoteException
      */
 	
-    public void recupererMesPetitesBlind(long uuid)
+    private void poserPetiteBlinde(Joueur joueur)
 	{
-		Joueur joueur = table.getJoueur(uuid);
 		int petiteBlinde = table.getPetiteBlinde();
 		
 		if (joueur.getSolde()-petiteBlinde>=0)
@@ -261,9 +300,8 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 			table.setPot(table.getPot()+petiteBlinde);
 			joueur.setSolde(joueur.getSolde()-petiteBlinde);
 			joueur.setStatut("attente");
-			
-			this.chercheJoueurSuivant(joueur,"petiteBlinde");
 		}
+		System.out.println("Petite blinde lancée: "+petiteBlinde);
 	}
 	
 	/**
@@ -274,9 +312,8 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
      * @throws RemoteException
      */
     
-    public void recupererMesGrossesBlind(long uuid)
+    private void poserGrosseBlinde(Joueur joueur)
 	{
-		Joueur joueur = table.getJoueur(uuid);
 		int grosseBlinde = table.getPetiteBlinde()*2;
 		
 		if (joueur.getSolde()-grosseBlinde>=0)
@@ -284,16 +321,12 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 			table.setPot(table.getPot()+grosseBlinde);
 			joueur.setSolde(joueur.getSolde()-grosseBlinde);
 			joueur.setStatut("attente");
-			
-			if (joueur.isDealer()) this.nouveauTour();
-			this.chercheJoueurSuivant(joueur,"jouer");
 		}
 		else
 		{
-			table.transfertJoueur(uuid);
+			table.transfertJoueur(joueur.getUID());
 		}
-		
-		if (nbTour==1) this.donnerCartes();
+		System.out.println("Petite blinde lancée: "+grosseBlinde);
 	}
 	
    
@@ -440,6 +473,40 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
     	return lParticipant;
     }
     
+    private void transmettreNouveauJoueur(long uuid)
+    {
+    	Joueur[] listJoueur = table.getListJoueur();
+		Joueur[] listAttente = table.getListAttente();
+		
+		
+		List<Object[]> actionATransmettre = demanderListeJoueur();
+		
+		try 
+		{
+			for (Joueur j : listJoueur)
+			{
+				if(j.isPresent() && j.getUID()!=uuid)
+				{
+					j.getInterfaceClient().miseAJourTable(actionATransmettre, table.getPot());
+				}
+			}
+			
+			for (Joueur j : listAttente)
+			{
+				if(j!=null )
+				{
+					if (j.isPresent() && j.getUID()!=uuid ) 
+					{
+						j.getInterfaceClient().miseAJourTable(actionATransmettre, table.getPot());
+					}
+				}
+			}
+		} catch (RemoteException e) 
+		{
+			e.printStackTrace();
+		}
+    }
+    
 	/**
 	 * Permet de transmettre une action faite d'un joueur
 	 * à toutes les personnes.
@@ -476,6 +543,11 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 		}
 	}
 	
+	 public boolean quitter(long uuid)
+	 {
+		 return false;
+	 }
+	 
 	/**
 	 * Fait passer au tour suivant
 	 */
