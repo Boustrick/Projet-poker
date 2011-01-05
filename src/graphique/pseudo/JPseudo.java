@@ -1,5 +1,4 @@
 package graphique.pseudo;
-
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -10,6 +9,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
+import reseau.Global;
 
 import jeux.Poker;
 
@@ -27,6 +28,10 @@ public class JPseudo extends JFrame implements ActionListener {
 	private String texte = "Entrez votre pseudo ici.";
 	private JTextField pseudo = new JTextField(texte);
 	
+	// Label où l'utilisateur rentre l'adresse IP du serveur
+	private JLabel infoIP = new JLabel("Adresse IP du serveur : ");
+	private JTextField ip = new JTextField("128.0.0.1");
+	
 	// Bouton de validation du pseudo
 	private JButton btn_valider = new JButton("Valider");
 	
@@ -40,7 +45,7 @@ public class JPseudo extends JFrame implements ActionListener {
 		this.poker = poker;
 		this.setTitle("Choix du pseudo");
 		this.setResizable(false);
-		this.setBounds(100, 100, 400, 150);
+		this.setBounds(100, 100, 400, 200);
 		GridBagLayout layout = new GridBagLayout();
 		GridBagConstraints constraints = new GridBagConstraints();
 		this.setLayout(layout);
@@ -55,12 +60,19 @@ public class JPseudo extends JFrame implements ActionListener {
 		layout.addLayoutComponent(info, constraints);
 		constraints.gridx = 3;
 		layout.addLayoutComponent(pseudo, constraints);
-		constraints.gridx = 2;
+		constraints.gridx = 0;
 		constraints.gridy = 1;
+		layout.addLayoutComponent(infoIP, constraints);
+		constraints.gridx = 3;
+		layout.addLayoutComponent(ip, constraints);
+		constraints.gridx = 2;
+		constraints.gridy = 2;
 		constraints.gridwidth = 2;
 		layout.addLayoutComponent(btn_valider, constraints);
 		this.add(info);
 		this.add(pseudo);
+		this.add(infoIP);
+		this.add(ip);
 		this.add(btn_valider);
 		btn_valider.addActionListener(this);
 	}
@@ -76,6 +88,7 @@ public class JPseudo extends JFrame implements ActionListener {
 		System.out.println(pseudo);
 		if ((!pseudo.equalsIgnoreCase(texte))&&(!pseudo.equalsIgnoreCase(""))) {
 			this.setVisible(false);
+			Global.ip = ip.getText();
 			poker.lancementPartie(pseudo);
 		}
 	}
