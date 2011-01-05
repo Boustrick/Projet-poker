@@ -58,17 +58,11 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 			if (ip.equals(InetAddress.getLocalHost()))
 			{
 				interfaceJoueur = (InterfaceClient)obj[3];
-				System.out.println("Dealer "+interfaceJoueur.toString());
 				
 			}
 			else
 			{
-				if (interfaceJoueur==null) System.out.println("interface vide");
-				
 				interfaceJoueur = (InterfaceClient)Naming.lookup("rmi://"+ip.getHostAddress()+"/client");
-				
-				interfaceJoueur.donnerCarte("11_2","11_2");
-				System.out.println("Joueur "+interfaceJoueur.toString());
 			}
 		} catch (RemoteException e) {e.printStackTrace();
 		} catch (NotBoundException e) {e.printStackTrace();
@@ -111,8 +105,6 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 			break;
 		}
 		
-		System.out.println("Placement du joueur fini");
-		
 		if (table.getNbJoueur()==2) this.startGame();
 		this.transmettreAction();
 		
@@ -132,30 +124,33 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 	{
 		Joueur joueur = table.getJoueur(uuid);
 		
-		if (joueur.getSolde()-somme>=0)
+		if(joueur.getStatut().equals("jouer"))
 		{
-			joueur.setSolde(joueur.getSolde()-(int)somme);
-			joueur.setDerniereMise((int)somme);
-			table.setPot(table.getPot()+(int)somme);
-			joueur.setStatut("attente");
-		}
-		else
-		{
-			if (joueur.getSolde()>0)
+			if (joueur.getSolde()-somme>=0)
 			{
-				table.setPot(table.getPot()+joueur.getSolde());
-				joueur.setSolde(0);
+				joueur.setSolde(joueur.getSolde()-(int)somme);
+				joueur.setDerniereMise((int)somme);
+				table.setPot(table.getPot()+(int)somme);
 				joueur.setStatut("attente");
 			}
 			else
 			{
-				joueur.setStatut("coucher");
+			if (joueur.getSolde()>0)
+				{
+					table.setPot(table.getPot()+joueur.getSolde());
+					joueur.setSolde(0);
+					joueur.setStatut("attente");
+				}
+				else
+				{
+					joueur.setStatut("coucher");
+				}
 			}
-		}
 		
-		if (joueur.isDealer()) this.nouveauTour();
-		this.chercheJoueurSuivant(joueur,"jouer");
-		this.transmettreAction();
+			if (joueur.isDealer()) this.nouveauTour();
+			this.chercheJoueurSuivant(joueur,"jouer");
+			this.transmettreAction();
+		}
 	}
 	
     /**
@@ -169,39 +164,42 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 		Joueur joueur = table.getJoueur(uuid);
 		int derniereMise = table.getDerniereMise();
 		
-		if (joueur.getSolde()-table.getDerniereMise()>=0)
+		if(joueur.getStatut().equals("jouer"))
 		{
-			joueur.setSolde(joueur.getSolde()-derniereMise);
-			joueur.setDerniereMise(derniereMise);
-			table.setPot(table.getPot()+derniereMise);
-			joueur.setStatut("attente");
-		}
-		else
-		{
-			if (joueur.getSolde()>0)
+			if (joueur.getSolde()-table.getDerniereMise()>=0)
 			{
-				table.setPot(table.getPot()+joueur.getSolde());
-				joueur.setSolde(0);
+				joueur.setSolde(joueur.getSolde()-derniereMise);
+				joueur.setDerniereMise(derniereMise);
+				table.setPot(table.getPot()+derniereMise);
 				joueur.setStatut("attente");
 			}
 			else
 			{
-				joueur.setStatut("coucher");
+				if (joueur.getSolde()>0)
+				{
+					table.setPot(table.getPot()+joueur.getSolde());
+					joueur.setSolde(0);
+					joueur.setStatut("attente");
+				}
+				else
+				{
+					joueur.setStatut("coucher");
+				}
 			}
-		}
-		if (joueur.isDealer()) this.nouveauTour();
+			if (joueur.isDealer()) this.nouveauTour();
 		
-		if (table.getNbJoueur()>=2) 
-		{
-			this.chercheJoueurSuivant(joueur,"jouer");
+			if (table.getNbJoueur()>=2) 
+			{
+				this.chercheJoueurSuivant(joueur,"jouer");
 			
-		}
-		else
-		{
-			this.partieCommencer = false;
-		}
+			}
+			else
+			{
+				this.partieCommencer = false;
+			}
 		
-		this.transmettreAction();
+			this.transmettreAction();
+		}
 	}
 	
     
@@ -266,35 +264,32 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 		partieCommencer = true;
 		nbTour = 1;
 			
-		
 		int i=0;
-		boolean fin = false;
 		boolean petiteBlinde = false;
-		boolean grosseBlinde = false;
 		
 		Joueur[] listJoueur = table.getListJoueur();
-		Joueur joueur = null;
 		
-		while(i<10 && !fin)
+		for(Joueur joueur : listJoueur)
 		{
-			joueur = listJoueur[i];
 			System.out.println("Joueur "+i+" present :"+joueur.isPresent());
 			if (joueur.isPresent() && !petiteBlinde)
 			{
 				this.poserPetiteBlinde(joueur);
 				petiteBlinde = true;
 			}
-			else 	if (joueur.isPresent() && !grosseBlinde)
+			else 	if (joueur.isPresent())
 					{
 						this.poserGrosseBlinde(joueur);
 						if (joueur.isDealer()) this.nouveauTour();
-						grosseBlinde = true;
+						chercheJoueurSuivant(joueur,"jouer");
+						break;
 					}
 
 			i++;
 		}
 		System.out.println("Fin des poses de la petite et grosse blinde");
 		this.donnerCartes();
+		
 		
 	}
 	
@@ -424,13 +419,11 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 	private void chercheJoueurSuivant(Joueur joueur,String statut)
 	{
 		Joueur[] listJoueur = table.getListJoueur();
-		Joueur j;
 		int i = 0;
 		
 		/** Cherche la position du joueur **/
-		while(true)
+		for(Joueur j : listJoueur)
 		{
-			j = listJoueur[i];
 			if(j.isPresent() && j.equals(joueur))
 			{
 				j.setStatut(statut);
@@ -489,12 +482,24 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
      * liste des joueurs.
      * @param UUID du joueur
      * @return une liste de tableaux d'object de 6 colonnes :
+     *  - une liste de tableaux d'object de 6 colonnes :
+     *                  
+     *                  adresseIP		(String)
+     *                  uuid			(long)
      *                  pseudo          (String)
      *                  solde           (long)
      *                  mise            (long)
      *                  statut          (String)
-     * (* Normalement le statut indique s'il peut jouer ou pas *)
-     *                  numéro          (int)   
+     *                  
+     *    			(*  attente (* Attent de pouvoir jouer *)
+	 *		 			spectateur (* mode spectateur *)
+     *		 			couche (* s'est couché *)
+	 *		 			 petiteBlinde (* c'est lui la petite blinde *)
+	 *		  			grosseBlinde (* c'est lui la grosse blinde *)
+	 *		 			 jouer (* c'est à lui de jouer *)
+	 *     			*)
+     *                 
+     *                  position          (int)   
 	 * 
      * @throws RemoteException
      */
@@ -512,11 +517,15 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
     		{
     			Object[] joueur = new Object[7];
     		
-    			joueur[0] = j.getPseudo();
-    			joueur[1] = j.getSolde();
-    			joueur[2] = j.getDerniereMise();
-    			joueur[3] = j.getStatut();
-    			joueur[4] = j.getPositionTable();
+    			
+    			joueur[0] = j.getIp();
+    			joueur[1] = j.getUID();
+    			joueur[2] = j.getPseudo();
+    			joueur[3] = j.getSolde();
+    			joueur[4] = j.getDerniereMise();
+    			joueur[5] = j.getStatut();
+    			joueur[6] = j.getPositionTable();
+    			lParticipant.add(joueur);
     		}
     	}
     	
@@ -526,51 +535,21 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
     		{
     			Object[] joueur = new Object[7];
     		
-    			joueur[0] = j.getPseudo();
-    			joueur[1] = j.getSolde();
-    			joueur[2] = j.getDerniereMise();
-    			joueur[3] = j.getStatut();
-    			joueur[4] = j.getPositionTable();
+    			joueur[0] = j.getIp();
+    			joueur[1] = j.getUID();
+    			joueur[2] = j.getPseudo();
+    			joueur[3] = j.getSolde();
+    			joueur[4] = j.getDerniereMise();
+    			joueur[5] = j.getStatut();
+    			joueur[6] = j.getPositionTable();
+    			lParticipant.add(joueur);
     		}
     	}
     	
     	return lParticipant;
     }
     
-    private void transmettreNouveauJoueur(long uuid)
-    {
-    	Joueur[] listJoueur = table.getListJoueur();
-		Joueur[] listAttente = table.getListAttente();
-		
-		
-		List<Object[]> actionATransmettre = demanderListeJoueur();
-		
-		try 
-		{
-			for (Joueur j : listJoueur)
-			{
-				if(j.isPresent() && j.getUID()!=uuid)
-				{
-					j.getInterfaceClient().miseAJourTable(actionATransmettre, table.getPot());
-				}
-			}
-			
-			for (Joueur j : listAttente)
-			{
-				if(j!=null )
-				{
-					if (j.isPresent() && j.getUID()!=uuid ) 
-					{
-						j.getInterfaceClient().miseAJourTable(actionATransmettre, table.getPot());
-					}
-				}
-			}
-		} catch (RemoteException e) 
-		{
-			e.printStackTrace();
-		}
-    }
-    
+   
 	/**
 	 * Permet de transmettre une action faite d'un joueur
 	 * à toutes les personnes.
@@ -658,6 +637,19 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 				System.out.println("Fin de partie");
 			}
 			break;
+		}
+		
+		for(Joueur joueur : table.getListJoueur())
+		{
+			if(joueur.isPresent())
+			{
+				List<String> listCarte = table.getListCarteTable();
+				
+				try 
+				{
+					joueur.getInterfaceClient().voirCartesATable(listCarte.toArray());
+				} catch (RemoteException e) {e.printStackTrace();}
+			}
 		}
 		nbTour++;
 		return resultat;
