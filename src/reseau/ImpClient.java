@@ -73,39 +73,43 @@ public class ImpClient extends UnicastRemoteObject implements InterfaceClient {
 	public void miseAJourTable(List<Object[]> listParticipant, long pot)
 	{
 		for(Object[] obj : listParticipant){
-		
-			JTable jtable = Global.getJTable();
-			int solde = (Integer) obj[3];
-			
-			int position = (Integer) obj[6];
-			if((Integer)obj[1] == Global.uuid){
-				Global.position = position;
-				
-			}
-			
-			int mise  = (Integer) obj[4];
-			
-			if (Global.listPositionPJ[position] == 0) {
-				jtable.ajoutJoueur((String) obj[2], solde, position);
-				Global.listPositionPJ[position] = 1;
-			} else {
-				System.out.println("Mise : " + mise);
-				jtable.miser(position, mise, solde);
-			}
-			//ajouter les autres mise à jour
-			
 			String statut = (String)obj[5];
-			if(statut.equals("petiteBlinde")){
-				jtable.setPBlend(position);
-			}
-			if(statut.equals("grosseBlinde")){
-				jtable.setGBlend(position);
-			}
-			if(statut.equals("attente")){
-				Global.getPanelBoutons().griserOuDegriser(true);
-			}
-			if(statut.equals("jouer")){
+			
+			if (!statut.equals("spectateur")) {
 				Global.getPanelBoutons().griserOuDegriser(false);
+				JTable jtable = Global.getJTable();
+				int solde = (Integer) obj[3];
+				
+				int position = (Integer) obj[6];
+				if((Integer)obj[1] == Global.uuid){
+					Global.position = position;
+					
+				}
+				System.out.println("statut de "+(String) obj[2]+"  "+statut);
+				int mise  = (Integer) obj[4];
+				
+				if (Global.listPositionPJ[position] == 0) {
+					jtable.ajoutJoueur((String) obj[2], solde, position);
+					Global.listPositionPJ[position] = 1;
+				} else {
+					jtable.miser(position, mise, solde);
+				}
+				//ajouter les autres mise à jour
+				
+				if(statut.equals("petiteBlinde")){
+					jtable.setPBlend(position);
+				}
+				if(statut.equals("grosseBlinde")){
+					jtable.setGBlend(position);
+				}
+				if(statut.equals("attente")){
+					Global.getPanelBoutons().griserOuDegriser(true);
+				}
+				if(statut.equals("jouer")){
+					Global.getPanelBoutons().griserOuDegriser(false);
+				}
+			}else{
+				Global.getPanelBoutons().griserOuDegriser(true);
 			}
 		}
 		
