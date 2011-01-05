@@ -2,6 +2,7 @@ package graphique.boutons;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 import reseau.Global;
 
@@ -69,8 +70,13 @@ public class ActionsBoutons implements ActionListener {
 		/****** Bouton Quitter ******/
 		else if(e.getSource()==boutons.getQuitter()){
 			System.out.println("Quitter");
-			//Changement de panel affiche le bouton rejoindre
-			boutons.changementPanel(PanelBoutons.REJOINDRE);
+			try {
+				Global.interS.quitter(Global.uuid);
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			System.exit(0);
 		}
 		boutons.repaint();
 		boutons.validate();

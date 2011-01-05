@@ -56,7 +56,7 @@ public class PanelBoutons extends JPanel {
 		/******* Creation de l'interface pour le bouton quitter *******/
 		PanelQuitter=new JPanel();
 		PanelQuitter.setLayout(new FlowLayout(FlowLayout.CENTER));
-		quitter=new JButton("Quitter Partie");
+		quitter=new JButton("Quitter le jeu");
 		PanelQuitter.add(quitter);
 
 		/******* Création de l'interface pour les boutons d'actions *****/
