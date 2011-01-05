@@ -228,6 +228,20 @@ public class PanelBoutons extends JPanel {
 		validerRelance.setVisible(visible);
 	}
 	
+	
+	/*************************************************
+	 * Permet de griser ou décriser les boutons d'action
+	 * @param boolean visible
+	 *************************************************/
+	public void griserOuDegriser(boolean visible) {
+		suivre.setEnabled(!visible);
+		relance.setEnabled(!visible);
+		tapis.setEnabled(!visible);
+		seCoucher.setEnabled(!visible);
+		this.afficherEntreesRelance(visible);
+	}
+	
+	
 	/*************************************************
 	 * Permet de changer le PanelCourant
 	 * @param int utiliser les constante

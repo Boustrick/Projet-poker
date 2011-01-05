@@ -2,20 +2,11 @@ package jeux;
 
 import graphique.boutons.ActionsBoutons;
 import graphique.boutons.PanelBoutons;
-import graphique.carte.Carte;
 import graphique.pseudo.JPseudo;
 import graphique.table.JTable;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.JFrame;
-
-import calcul.CalculMain;
-
 
 import java.net.InetAddress;
 import java.net.MalformedURLException;
