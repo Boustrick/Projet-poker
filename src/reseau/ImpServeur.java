@@ -63,7 +63,11 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 			}
 			else
 			{
+				if (interfaceJoueur==null) System.out.println("interface vide");
+				
 				interfaceJoueur = (InterfaceClient)Naming.lookup("rmi://"+ip.getHostAddress()+"/client");
+				
+				interfaceJoueur.donnerCarte("11_2","11_2");
 				System.out.println("Joueur "+interfaceJoueur.toString());
 			}
 		} catch (RemoteException e) {e.printStackTrace();
