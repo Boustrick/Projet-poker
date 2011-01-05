@@ -31,8 +31,10 @@ public class Table
 		{
 			listJoueur[i] = new Joueur(); 
 		}
+		
 		listAttente = new Joueur[10];
-		for (int i = 0;i<10;i++)
+		
+		for (int i = 0 ; i<10 ; i++)
 		{
 			listJoueur[i] = new Joueur(); 
 		}
@@ -146,13 +148,18 @@ public class Table
 	
 	public String getNewCarte()
 	{
-		int lower = 0;
-		int higher = listCarte.size()-1;
+		int couleurLower = 1;
+		int couleurHigher = 4;
 
-		int random = (int)(Math.random() * (higher-lower)) + lower;
+		int couleur = (int)(Math.random() * (couleurHigher-couleurLower)) + couleurLower;
 		
-		System.out.println("Random Carte: "+random);
-		return (String)listCarte.get(random);
+		int valeurLower = 1;
+		int valeurHigher = 13;
+
+		int valeur = (int)(Math.random() * (valeurHigher-valeurLower)) + valeurLower;
+		
+		System.out.println("Random Carte: "+valeur+"_"+couleur);
+		return (valeur+"_"+couleur);
 	}
 	
 	/**
