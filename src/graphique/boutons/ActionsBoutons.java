@@ -62,7 +62,12 @@ public class ActionsBoutons implements ActionListener {
 		/****** Bouton Rejoindre ******/
 		else if(e.getSource()==boutons.getRejoindre()){
 			System.out.println("Rejoindre");
-			Global.poker.gestionConnexion();
+			try {
+				Global.poker.gestionConnexion();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			
 			//Changement de panel afficher les boutons.
 			boutons.changementPanel(PanelBoutons.ACTIONS);

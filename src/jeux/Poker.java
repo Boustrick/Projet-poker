@@ -79,7 +79,7 @@ public class Poker {
 	}
 	
 	
-	public void gestionConnexion() {
+	public void gestionConnexion() throws RemoteException {
 		Connexion connect;
 		if(Global.dealer == true){
 			connect = new ConnexionDealer();
@@ -100,6 +100,8 @@ public class Poker {
 		
 		// init du client
 		Global.interC = new ImpClient();
+		
+		System.out.println(Global.interC.toString());
 		
 		
 		

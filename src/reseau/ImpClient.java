@@ -7,22 +7,24 @@ import graphique.table.JTable;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class ImpClient implements InterfaceClient, Serializable {
+public class ImpClient extends UnicastRemoteObject implements InterfaceClient {
 
 	
+	public ImpClient() throws RemoteException {
+	
+	}
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public ImpClient(){
-		
-		
-	}
+	
 	
 	/*
      * recupererSesGains après fin de partie
@@ -161,29 +163,31 @@ public class ImpClient implements InterfaceClient, Serializable {
      * @throws RemoteException
      */
 	public void donnerCarte(String ct1, String ct2) {
-		List<String> listCarte = new ArrayList<String>();
-		listCarte.add(ct1);
-		listCarte.add(ct2);
-		
-		List<String> splitCartes = new ArrayList<String>();
-		for(String cart : listCarte){
-			StringTokenizer stt = new StringTokenizer(cart, "_");
-			while ( stt.hasMoreTokens() ) {
-				splitCartes.add(stt.nextToken());
-			}
-		}
-		// On a une liste de string avec les valeurs dans l'ordre
-		List<Integer> convertToInt = new ArrayList<Integer>();
-		for(String spli : splitCartes){
-			convertToInt.add(Integer.parseInt(spli));
-		}
-		List<Carte> listeCarte = new ArrayList<Carte>();
-		for(int i=0;i<convertToInt.size();i=i+2) {
-			listeCarte.add(new Carte(convertToInt.get(i+1),convertToInt.get(i)));
-		}	
+//		List<String> listCarte = new ArrayList<String>();
+//		listCarte.add(ct1);
+//		listCarte.add(ct2);
+//		
+//		List<String> splitCartes = new ArrayList<String>();
+//		for(String cart : listCarte){
+//			StringTokenizer stt = new StringTokenizer(cart, "_");
+//			while ( stt.hasMoreTokens() ) {
+//				splitCartes.add(stt.nextToken());
+//			}
+//		}
+//		// On a une liste de string avec les valeurs dans l'ordre
+//		List<Integer> convertToInt = new ArrayList<Integer>();
+//		for(String spli : splitCartes){
+//			convertToInt.add(Integer.parseInt(spli));
+//		}
+//		List<Carte> listeCarte = new ArrayList<Carte>();
+//		for(int i=0;i<convertToInt.size();i=i+2) {
+//			listeCarte.add(new Carte(convertToInt.get(i+1),convertToInt.get(i)));
+//		}	
 		
 		
 		System.out.println("passe donner carte");
 	}
 
+	
+	
 }

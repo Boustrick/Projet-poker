@@ -46,7 +46,7 @@ public class ConnexionJoueur implements Connexion {
 		System.out.println("Local Regestry OK Client");
 		
 		//"rmi://"+adress+":"+port+"/"+bindingName, implementation);
-		Naming.rebind("rmi://localhost/poker", implc);
+		Naming.rebind("rmi://localhost/client", implc);
 		System.out.println("Publication dans l'annuaire OK Client");
 		} catch (RemoteException e) {}
 		
@@ -56,6 +56,7 @@ public class ConnexionJoueur implements Connexion {
 		{
 			inter=(InterfaceServeur)Naming.lookup("rmi://"+Global.ip+":1099/poker");
 			System.out.println("connexion au serveur !");
+			
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		} catch (NotBoundException e) {
