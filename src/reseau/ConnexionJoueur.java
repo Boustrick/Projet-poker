@@ -54,7 +54,7 @@ public class ConnexionJoueur implements Connexion {
 		InterfaceServeur inter = null;
 		try 
 		{
-			inter=(InterfaceServeur)Naming.lookup("rmi://192.168.1.32:1099/poker");
+			inter=(InterfaceServeur)Naming.lookup("rmi://"+Global.ip+":1099/poker");
 			System.out.println("connexion au serveur !");
 		} catch (RemoteException e) {
 			e.printStackTrace();

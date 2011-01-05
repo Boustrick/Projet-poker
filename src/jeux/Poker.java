@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 
 import reseau.Connexion;
 
+import reseau.ConnexionDealer;
 import reseau.ConnexionJoueur;
 import reseau.Global;
 import reseau.ImpClient;
@@ -94,7 +95,12 @@ public class Poker {
 		// init du client
 		Global.interC = new ImpClient();
 		
+		
+		
 		try {
+			if(connect instanceof ConnexionDealer){
+				Object[] infosPJ = {Global.pseudo, 1500, InetAddress.getLocalHost(), Global.interC};
+			}
 			Object[] infosPJ = {Global.pseudo, 1500, InetAddress.getLocalHost()};
 			
 			Global.uuid = inter.envoiInformationsJoueur(infosPJ);
