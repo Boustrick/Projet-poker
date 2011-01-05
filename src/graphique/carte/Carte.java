@@ -1,5 +1,6 @@
 package graphique.carte;
 
+
 /**
  * Une carte de jeu :
  * couleur : 1-Coeur | 2-Carreau | 3-Trèfle | 4-Pique
@@ -7,7 +8,7 @@ package graphique.carte;
  * @author Benjamin
  * @version 0.1
  **/
-public class Carte {
+public class Carte implements Comparable<Carte>{
 	
 	private int couleur;
 	private int valeur;
@@ -51,5 +52,15 @@ public class Carte {
 	public int getValeur() {
 		return valeur;
 	}
+
+
+	public int compareTo(Carte o1) {
+		if(o1.getValeur()>this.getValeur()) return -1;
+		else if(o1.getValeur()<this.getValeur()) return 1;
+		else return 0;
+
+	}
+
+
 }
 
