@@ -7,22 +7,24 @@ import graphique.table.JTable;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class ImpClient implements InterfaceClient, Serializable {
+public class ImpClient extends UnicastRemoteObject implements InterfaceClient {
 
 	
+	public ImpClient() throws RemoteException {
+	
+	}
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public ImpClient(){
-		
-		
-	}
+	
 	
 	/*
      * recupererSesGains après fin de partie
@@ -185,5 +187,7 @@ public class ImpClient implements InterfaceClient, Serializable {
 		
 		System.out.println("passe donner carte");
 	}
+
+	
 	
 }
