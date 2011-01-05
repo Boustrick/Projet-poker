@@ -1,5 +1,7 @@
 package graphique.boutons;
 
+import graphique.carte.Carte;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
@@ -45,6 +47,7 @@ public class ActionsBoutons implements ActionListener {
 			Global.mise = mises;
 			Global.poker.gestionActions(3);
 			System.out.println("Relance de "+mises);
+			//Global.getJTable().ajoutCartesJoueur(0, new Carte(2, 8), new Carte(3, 8));
 			
 		}
 		/****** Bouton Se Coucher ******/

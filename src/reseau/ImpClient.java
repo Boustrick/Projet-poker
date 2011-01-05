@@ -123,7 +123,6 @@ public class ImpClient extends UnicastRemoteObject implements InterfaceClient {
 			
 			String statut = (String) obj[5];
 			
-			System.out.println("passe maj");
 		}
 		
 		int le_pot = (int) pot;
@@ -143,13 +142,36 @@ public class ImpClient extends UnicastRemoteObject implements InterfaceClient {
      * @return void
      * @throws RemoteException
      */
-	public void voirCartesATable(Object[] listCarte)
+	public void voirCartesATable(Object[] listCart)
 	{
-		int taille = listCarte.length;
+		List<String> listCarte = new ArrayList<String>();
 		
-		for(int i=0; i<taille;i++){
-			Global.getJTable().ajoutCarte((Carte) listCarte[i], i);
+		for(Object obj : listCart){
+			listCarte.add((String)obj);
 		}
+		
+		
+		List<String> splitCartes = new ArrayList<String>();
+		for(String cart : listCarte){
+			StringTokenizer stt = new StringTokenizer(cart, "_");
+			while ( stt.hasMoreTokens() ) {
+				splitCartes.add(stt.nextToken());
+			}
+		}
+		// On a une liste de string avec les valeurs dans l'ordre
+		List<Integer> convertToInt = new ArrayList<Integer>();
+		for(String spli : splitCartes){
+			convertToInt.add(Integer.parseInt(spli));
+		}
+		List<Carte> listeCarte = new ArrayList<Carte>();
+		for(int i=0;i<convertToInt.size();i=i+2) {
+			listeCarte.add(new Carte(convertToInt.get(i+1),convertToInt.get(i)));
+		}	
+		int taille = listCarte.size();
+		for(int i=0; i<taille; i++){
+			System.out.println("Affiche "+listeCarte.get(i).getValeur());
+		}
+		System.out.println("Affiche "+taille+ " Cartes ");
 	}
 	
 	
@@ -193,10 +215,9 @@ public class ImpClient extends UnicastRemoteObject implements InterfaceClient {
 		
 		JTable jtable = Global.getJTable();
 		
-		System.out.println("position "+Global.position);
-		System.out.println("affiche valer "+(Integer)listeCarte.get(0).getValeur());
-		jtable.ajoutCartesJoueur(0, listeCarte.get(0), listeCarte.get(1));
 		
+		jtable.ajoutCartesJoueur(Global.position, listeCarte.get(0), listeCarte.get(1));
+
 		
 		System.out.println("passe donner carte");
 	}

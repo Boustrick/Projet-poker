@@ -12,6 +12,8 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import reseau.Global;
+
 /**
  * Gère l'affichage d'un joueur
  *@author Fabien
@@ -193,8 +195,9 @@ public class JJoueur extends JPanel {
 		this.add(carte1);
 		this.add(carte2);
 		
-		this.repaint();
-		this.updateUI();
+		Global.getJTable().repaint();
+		//this.updateUI();
+		Global.getJTable().validate();
 	}
 	
 	/**
