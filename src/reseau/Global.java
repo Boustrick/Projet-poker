@@ -11,6 +11,7 @@ public class Global {
 	public static InterfaceClient interC;
 	public static String pseudo;
 	public static long uuid;
+	public static String ip;
 	
 	public static int mise;
 
