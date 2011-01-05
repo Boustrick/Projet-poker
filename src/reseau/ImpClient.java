@@ -1,11 +1,8 @@
 package reseau;
 
 import graphique.carte.Carte;
-import graphique.carte.JCarte;
 import graphique.table.JTable;
 
-import java.io.Serializable;
-import java.net.InetAddress;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -76,53 +73,44 @@ public class ImpClient extends UnicastRemoteObject implements InterfaceClient {
 	public void miseAJourTable(List<Object[]> listParticipant, long pot)
 	{
 		for(Object[] obj : listParticipant){
-//			String carte = (String) obj[0];
-//			//récup val 1 c'est la carte 2
-//			//2 c'est 3
-//			StringTokenizer st = new StringTokenizer(carte, "-");
-//			List<String> cartes = new ArrayList<String>();
-//			
-//			while ( st.hasMoreTokens() ) {
-//			    cartes.add(st.nextToken());
-//			}
-//			// la liste cartes contient deux string val1_coul1 et val2_coul2
-//			
-//			List<String> splitCartes = new ArrayList<String>();
-//			for(String cart : cartes){
-//				StringTokenizer stt = new StringTokenizer(cart, "_");
-//				while ( stt.hasMoreTokens() ) {
-//					splitCartes.add(stt.nextToken());
-//				}
-//			}
-//			// On a une liste de string avec les valeurs dans l'ordre
-//			
-//			List<Integer> convertToInt = new ArrayList<Integer>();
-//			for(String spli : splitCartes){
-//				convertToInt.add(Integer.parseInt(spli));
-//			}
-//			
-//			Carte carte1 = new Carte(convertToInt.get(1), convertToInt.get(0));
-//			Carte carte2 = new Carte(convertToInt.get(3), convertToInt.get(2));
-//			
-			JTable jtable = Global.getJTable();
-			int solde = (Integer) obj[3];
+			String statut = (String)obj[5];
 			
-			int position = (Integer) obj[6];
-			if((Integer)obj[1] == Global.uuid){
-				Global.position = position;
+			if (!statut.equals("spectateur")) {
+				Global.getPanelBoutons().griserOuDegriser(false);
+				JTable jtable = Global.getJTable();
+				int solde = (Integer) obj[3];
+				
+				int position = (Integer) obj[6];
+				if((Integer)obj[1] == Global.uuid){
+					Global.position = position;
+					
+				}
+				System.out.println("statut de "+(String) obj[2]+"  "+statut);
+				int mise  = (Integer) obj[4];
+				
+				if (Global.listPositionPJ[position] == 0) {
+					jtable.ajoutJoueur((String) obj[2], solde, position);
+					Global.listPositionPJ[position] = 1;
+				} else {
+					jtable.miser(position, mise, solde);
+				}
+				//ajouter les autres mise à jour
+				
+				if(statut.equals("petiteBlinde")){
+					jtable.setPBlend(position);
+				}
+				if(statut.equals("grosseBlinde")){
+					jtable.setGBlend(position);
+				}
+				if(statut.equals("attente")){
+					Global.getPanelBoutons().griserOuDegriser(true);
+				}
+				if(statut.equals("jouer")){
+					Global.getPanelBoutons().griserOuDegriser(false);
+				}
+			}else{
+				Global.getPanelBoutons().griserOuDegriser(true);
 			}
-			
-			
-			jtable.ajoutJoueur((String) obj[2], solde, position);
-			//jtable.ajoutCartesJoueur(position, carte1, carte2);
-			//ajouter les autres mise à jour
-			
-						
-			int mise  = (Integer) obj[4];
-			jtable.miser(position, mise);
-			
-			String statut = (String) obj[5];
-			
 		}
 		
 		int le_pot = (int) pot;
@@ -169,9 +157,11 @@ public class ImpClient extends UnicastRemoteObject implements InterfaceClient {
 		}	
 		int taille = listCarte.size();
 		for(int i=0; i<taille; i++){
-			System.out.println("Affiche "+listeCarte.get(i).getValeur());
+			Global.getJTable().ajoutCarte(listeCarte.get(i), i);
+			Global.getJTable().retournerCarte(0, i);
 		}
-		System.out.println("Affiche "+taille+ " Cartes ");
+		
+		
 	}
 	
 	
@@ -191,6 +181,7 @@ public class ImpClient extends UnicastRemoteObject implements InterfaceClient {
      * @throws RemoteException
      */
 	public void donnerCarte(String ct1, String ct2) {
+		System.out.println(ct1);
 		List<String> listCarte = new ArrayList<String>();
 		listCarte.add(ct1);
 		listCarte.add(ct2);
@@ -212,14 +203,8 @@ public class ImpClient extends UnicastRemoteObject implements InterfaceClient {
 			listeCarte.add(new Carte(convertToInt.get(i+1),convertToInt.get(i)));
 		}	
 		
-		
-		JTable jtable = Global.getJTable();
-		
-		
-		jtable.ajoutCartesJoueur(Global.position, listeCarte.get(0), listeCarte.get(1));
-
-		
-		System.out.println("passe donner carte");
+		Global.getJTable().ajoutCartesJoueur(Global.position, listeCarte.get(0), listeCarte.get(1));
+		Global.getJTable().retournerCarte(1, Global.position);
 	}
 
 	

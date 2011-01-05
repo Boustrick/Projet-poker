@@ -308,6 +308,7 @@ public class JTable extends JPanel {
 				((JCarte)cartes.get(position)).retournerCarte();
 			}
 		} else {
+			System.out.println("Retourner JJoueur");
 			if (joueurs.get(position) instanceof JJoueur) {
 				((JJoueur)joueurs.get(position)).retournerCartes();
 			}
@@ -326,6 +327,7 @@ public class JTable extends JPanel {
 		if (joueurs.get(position) instanceof JJoueur) {
 			((JJoueur)joueurs.get(position)).ajouterCartes (c1, c2);
 		}
+		this.formerTable();
 	}
 
 	/**
@@ -389,9 +391,11 @@ public class JTable extends JPanel {
 	 * Le joueur mise une somme
 	 * @param position Position du joueur qui mise
 	 * @param mise Valeur de la mise
+	 * @param banque Banque du joueur
 	 */
-	public void miser (int position, int mise) {
+	public void miser (int position, int mise, int banque) {
 		((JJoueur)joueurs.get(position)).miser(mise);
+		((JJoueur)joueurs.get(position)).setBanque(banque);
 	}
 	
 	/**
