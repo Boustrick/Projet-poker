@@ -98,12 +98,16 @@ public class Poker {
 		
 		
 		try {
+			 
 			if(connect instanceof ConnexionDealer){
 				Object[] infosPJ = {Global.pseudo, 1500, InetAddress.getLocalHost(), Global.interC};
+				Global.uuid = inter.envoiInformationsJoueur(infosPJ);
+			}else{
+				Object[] infosPJ = {Global.pseudo, 1500, InetAddress.getLocalHost()};
+				Global.uuid = inter.envoiInformationsJoueur(infosPJ);
 			}
-			Object[] infosPJ = {Global.pseudo, 1500, InetAddress.getLocalHost()};
 			
-			Global.uuid = inter.envoiInformationsJoueur(infosPJ);
+			
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
