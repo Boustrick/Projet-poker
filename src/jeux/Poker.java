@@ -101,6 +101,8 @@ public class Poker {
 		// init du client
 		Global.interC = new ImpClient();
 		
+		System.out.println(Global.interC.toString());
+		
 		
 		
 		try {
