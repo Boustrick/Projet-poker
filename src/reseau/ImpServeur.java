@@ -36,14 +36,13 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 	
 	public long envoiInformationsJoueur(Object[] obj)
 	{
-		System.out.println("Récuperation pseudo.");
-		String pseudo = (String)obj[0];
-		System.out.println("Récuperation solde.");
-		int solde = (Integer)obj[1];
-		System.out.println("Récuperation adresse.");
-		InetAddress ip = (InetAddress)obj[2];
 		
-		System.out.println("Récuperation réussit !!!");
+		String pseudo = (String)obj[0];
+		System.out.println("Pseudo: "+pseudo);
+		int solde = (Integer)obj[1];
+		System.out.println("Récuperation solde: "+solde);
+		InetAddress ip = (InetAddress)obj[2];
+		System.out.println("Récuperation adresse: "+ip.getHostAddress());
 		
 		int lower = 0;
 		int higher = 1000;
@@ -59,10 +58,13 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 			if (ip.equals(InetAddress.getLocalHost()))
 			{
 				interfaceJoueur = (InterfaceClient)obj[3];
+				System.out.println("Dealer "+interfaceJoueur.toString());
+				
 			}
 			else
 			{
-				interfaceJoueur=(InterfaceClient)Naming.lookup("rmi://"+ip+"/poker");
+				interfaceJoueur = (InterfaceClient)Naming.lookup("rmi://"+ip.getHostAddress()+"/client");
+				System.out.println("Joueur "+interfaceJoueur.toString());
 			}
 		} catch (RemoteException e) {e.printStackTrace();
 		} catch (NotBoundException e) {e.printStackTrace();
@@ -76,14 +78,14 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 			case(0):
 			{
 				table.setJoueur(new Joueur(UID,pseudo,"attente",true,0,solde,ip,interfaceJoueur));
-				System.out.println("Un nouveau joueur a été ajouter dans la partie. C'est le dealer.\nSont UID est "+UID);
+				System.out.println("Un nouveau joueur a été ajouter dans la partie. C'est le dealer.\nSon UID est "+UID);
 			}
 			break;
 			/** Aucune place de libre **/
 			case(10):
 			{
 				table.setAttente(new Joueur(UID,pseudo,"spectateur",false,0,solde,ip,interfaceJoueur));
-				System.out.println("Un nouveau joueur a été ajouter dans la file d'attente.\nSont UID est "+UID);
+				System.out.println("Un nouveau joueur a été ajouter dans la file d'attente.\nSon UID est "+UID);
 			}
 			break;
 			/** Place disponible **/
@@ -93,13 +95,13 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 				{
 					System.out.println("Attente de placement sur la liste d'attente.");
 					table.setAttente(new Joueur(UID,pseudo,"spectateur",false,0,solde,ip,interfaceJoueur));
-					System.out.println("Un nouveau joueur a été ajouter dans la file d'attente.\nSont UID est "+UID);
+					System.out.println("Un nouveau joueur a été ajouter dans la file d'attente.\nSon UID est "+UID);
 				}
 				else 
 				{
 					System.out.println("Attente de placement sur table");
 					table.setJoueur(new Joueur(UID,pseudo,"attente",false,0,solde,ip,interfaceJoueur));
-					System.out.println("Un nouveau joueur a été ajouter a la partie.\nSont UID est "+UID);
+					System.out.println("Un nouveau joueur a été ajouter a la partie.\nSon UID est "+UID);
 				}
 			}
 			break;
@@ -108,7 +110,7 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 		System.out.println("Placement du joueur fini");
 		
 		if (table.getNbJoueur()==2) this.startGame();
-		this.transmettreNouveauJoueur(UID);
+		this.transmettreAction();
 		
 		return UID;
 	}
@@ -152,7 +154,7 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 		this.transmettreAction();
 	}
 	
-    /*
+    /**
      * suivre appelée par les joueurs se tenant après la grosse blinde
      * @param UUID du joueur
      * @return le solde actuel du joueur (convertis en jeton chez le client)
@@ -347,21 +349,33 @@ public class ImpServeur extends UnicastRemoteObject implements InterfaceServeur
 	private void donnerCartes() 
 	{
 		Joueur[] listJoueur = table.getListJoueur();
+		InterfaceClient  interC;
+		String carte1;
+		String carte2;
+		int i=0;
 		
+		System.out.println("\nDistribution des cartes.");
 		for(Joueur j : listJoueur)
 		{
+			System.out.println("Joueur "+i+" est present :"+j.isPresent());
+			
+			i++;
 			if (j.isPresent())
 			{
-				InterfaceClient interC = j.getInterfaceClient();
-				String carte1 = table.getNewCarte();
-				String carte2 = table.getNewCarte();
+				System.out.println("IP: "+j.getIp().getHostAddress());
+				
+				interC = j.getInterfaceClient();
+				carte1 = table.getNewCarte();
+				carte2 = table.getNewCarte();
 				j.setCarte(carte1, carte2);	
+				System.out.println("Num im: "+interC);
 				try 
 				{
 					interC.donnerCarte(carte1,carte2);
 				} catch (RemoteException e) {e.printStackTrace();}
 			}
 		}
+		System.out.println("Fin de la distribution.\n");
 	}
 
 	/**
